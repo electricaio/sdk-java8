@@ -1,0 +1,18 @@
+version = "$echo"
+
+swaggerSources {
+    testV1 {
+        inputFile = file('../../integration/echo/swagger/test.v1.yml')
+        code {
+            language = 'java'
+            configFile = file('./swagger/test.v1.json')
+            components = ['models']
+        }
+    }
+}
+
+// To include generated classes in classpath.
+compileJava.dependsOn swaggerSources.testV1.code
+
+sourceSets.main.java.srcDir "${swaggerSources.testV1.code.outputDir}/src/main/java"
+sourceSets.main.resources.srcDir "${swaggerSources.testV1.code.outputDir}/src/main/resources"

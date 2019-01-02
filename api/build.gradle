@@ -1,0 +1,7 @@
+version = "$api"
+
+dependencies {
+    compile "com.google.code.findbugs:jsr305:$findbugsJsr305"
+    compile "org.slf4j:slf4j-api:$slf4j"
+}
+

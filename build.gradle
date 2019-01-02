@@ -1,0 +1,207 @@
+plugins {
+    id 'com.github.kt3k.coveralls' version '2.8.2'
+    id 'org.hidetake.swagger.generator' version '2.15.0' apply false
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'jacoco'
+    apply plugin: 'checkstyle'
+    apply plugin: 'findbugs'
+    apply plugin: 'maven-publish'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    group = 'io.electrica.sdk.java8'
+    version = '0.0.1'
+}
+
+subprojects {
+    ext {
+        api = '0.0.1'
+        core = '0.0.1'
+
+        slack = '0.0.1'
+        echo = '0.0.1'
+
+        findbugsJsr305 = '3.0.2'
+        lombok = '1.18.4'
+        gson = '2.8.5'
+        okhttp = '3.11.0'
+        slf4j = '1.7.25'
+        mockito = '2.23.0'
+        jupiter = '5.3.2'
+        swaggerAnnotations = '1.5.17'
+        swaggerCodegenCli = '2.3.1'
+    }
+
+    def moduleName = it.name
+    if (moduleName != 'dependencies') {
+
+        // Setup Lombok, test libraries and JUnit5 implementation for all modules
+        dependencies {
+            compileOnly "org.projectlombok:lombok:$lombok"
+            annotationProcessor "org.projectlombok:lombok:$lombok"
+
+            testCompile "org.mockito:mockito-core:$mockito"
+
+            testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiter"
+            testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiter"
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+
+        // Setup api module dependency and Swagger code-generator for typed connector modules
+        if (moduleName != 'api' && moduleName != 'core') {
+            apply plugin: 'org.hidetake.swagger.generator'
+
+            dependencies {
+                compile project(':api')
+
+                compile "com.google.code.gson:gson:$gson"
+                compile "io.swagger:swagger-annotations:$swaggerAnnotations"
+
+                swaggerCodegen "io.swagger:swagger-codegen-cli:$swaggerCodegenCli"
+            }
+        }
+
+        sourceSets {
+            main {
+                java { srcDir 'src/main/java' }
+                resources { srcDir 'src/main/resources' }
+            }
+        }
+
+        task sourceJar(type: Jar) {
+            classifier 'sources'
+            from sourceSets.main.allJava
+        }
+
+        publishing {
+            repositories {
+                maven {
+                    url System.env.AWS_S3_MAVEN_REPO_URL
+                    credentials(AwsCredentials) {
+                        accessKey System.env.AWS_ACCESS_KEY
+                        secretKey System.env.AWS_SECRET_KEY
+                    }
+                }
+            }
+            publications {
+                maven(MavenPublication) {
+                    from components.java
+                    afterEvaluate {
+                        artifactId = jar.baseName
+                    }
+                    pom {
+                        name = 'Electrica.io Java 8 SDK'
+                        description = 'Electrica.io Java 8 SDK library'
+//                    url = 'http://www.example.com/library'
+                        licenses {
+                            license {
+                                name = 'GNU General Public License, Version 3'
+                                url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                            }
+                        }
+                        scm {
+                            url = 'https://github.com/electricaio/sdk-java8'
+                            connection = 'scm:git:https://github.com/electricaio/sdk-java8.git'
+                        }
+                    }
+                    artifact tasks.sourceJar
+                }
+            }
+        }
+
+        jacocoTestReport {
+            reports {
+                xml.enabled = true // coveralls plugin depends on xml format report
+                html.enabled = true
+            }
+        }
+
+        // Checkstyle settings
+        checkstyle {
+            toolVersion '7.8.1'
+            configFile file("${rootDir}/config/checkstyle/checkstyle.xml")
+        }
+        checkstyleMain {
+            source = 'src/main/java'
+        }
+        checkstyleTest {
+            source = 'src/test/java'
+        }
+
+        tasks.withType(Checkstyle) {
+            reports {
+                xml.enabled false
+                html.enabled true
+            }
+        }
+
+        // Findbugs  settings
+        findbugs {
+            ignoreFailures = false
+            toolVersion = '3.0.1'
+            sourceSets = [sourceSets.main]
+            excludeFilter = file("${rootDir}/config/findbugs/excludeFilter.xml")
+            reportsDir = file("${buildDir}/reports/findbugs")
+            effort = 'max'
+        }
+
+        tasks.withType(FindBugs) {
+            reports {
+                xml.enabled false
+                html.enabled true
+            }
+        }
+
+    } // not `dependencies` module
+} // subprojects
+
+def projects = subprojects
+
+task jacocoMerge(type: JacocoMerge) {
+    projects.each { subproject ->
+        executionData subproject.tasks.withType(Test)
+    }
+    doFirst {
+        executionData = files(executionData.findAll { it.exists() })
+    }
+}
+
+task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
+    description = 'Generates an aggregate report from all subprojects'
+    dependsOn projects.test, jacocoMerge
+
+    additionalSourceDirs = files(projects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(projects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(projects.sourceSets.main.output)
+    executionData jacocoMerge.destinationFile
+
+    reports {
+        html.enabled = true // human readable
+        xml.enabled = true // required by coveralls
+    }
+}
+
+coveralls {
+    sourceDirs = projects.sourceSets.main.allSource.srcDirs.flatten()
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+}
+
+tasks.coveralls {
+    group = 'Coverage reports'
+    description = 'Uploads the aggregated coverage report to Coveralls'
+
+    dependsOn jacocoRootReport
+}
