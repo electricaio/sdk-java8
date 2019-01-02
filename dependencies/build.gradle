@@ -10,8 +10,8 @@ publishing {
         maven {
             url System.env.AWS_S3_MAVEN_REPO_URL
             credentials(AwsCredentials) {
-                accessKey System.env.AWS_ACCESS_KEY
-                secretKey System.env.AWS_SECRET_KEY
+                accessKey System.env.AWS_ACCESS_KEY_ID
+                secretKey System.env.AWS_SECRET_ACCESS_KEY
             }
         }
     }
@@ -19,18 +19,18 @@ publishing {
         maven(MavenPublication) {
             pom {
                 packaging = 'pom'
-//              name = 'My Library'
-//              description = 'A concise description of my library'
-//              url = 'http://www.example.com/library'
-//              licenses {
-//                  license {
-//                      name = 'The Apache License, Version 2.0'
-//                      url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                  }
-//              }
+                name = 'Java 8 SDK BOM'
+                description = 'Java 8 SDK BOM artifact'
+//                    url = 'http://www.example.com/library'
+                licenses {
+                    license {
+                        name = 'GNU General Public License, Version 3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                    }
+                }
                 scm {
-                    url = 'https://github.com/electricaio/sdk'
-                    connection = 'scm:git:https://github.com/electricaio/sdk.git'
+                    url = 'https://github.com/electricaio/sdk-java8'
+                    connection = 'scm:git:https://github.com/electricaio/sdk-java8.git'
                 }
             }
 

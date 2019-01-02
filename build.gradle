@@ -43,6 +43,7 @@ subprojects {
     }
 
     def moduleName = it.name
+    def moduleDescription = it.description == null ? moduleName : it.description
     if (moduleName != 'dependencies') {
 
         // Setup Lombok, test libraries and JUnit5 implementation for all modules
@@ -91,8 +92,8 @@ subprojects {
                 maven {
                     url System.env.AWS_S3_MAVEN_REPO_URL
                     credentials(AwsCredentials) {
-                        accessKey System.env.AWS_ACCESS_KEY
-                        secretKey System.env.AWS_SECRET_KEY
+                        accessKey System.env.AWS_ACCESS_KEY_ID
+                        secretKey System.env.AWS_SECRET_ACCESS_KEY
                     }
                 }
             }
@@ -103,8 +104,8 @@ subprojects {
                         artifactId = jar.baseName
                     }
                     pom {
-                        name = 'Electrica.io Java 8 SDK'
-                        description = 'Electrica.io Java 8 SDK library'
+                        name = moduleName + ' Java 8 SDK'
+                        description = moduleDescription
 //                    url = 'http://www.example.com/library'
                         licenses {
                             license {
