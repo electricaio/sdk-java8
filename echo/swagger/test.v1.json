@@ -1,7 +1,7 @@
 {
   "dateLibrary": "java8",
   "hideGenerationTimestamp": true,
-  "modelPackage": "io.electrica.sdk.java.echo.test.v1.model",
-  "invokerPackage": "io.electrica.sdk.java",
+  "modelPackage": "io.electrica.sdk.java8.echo.test.v1.model",
+  "invokerPackage": "io.electrica.sdk.java8",
   "useBeanValidation": false
 }
