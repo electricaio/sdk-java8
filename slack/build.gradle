@@ -1,0 +1,30 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+version = "$slack"
+
+def channelV1SwaggerFilePath = Files.createTempFile('slack.channel.v1.yml', null)
+
+task downloadSwaggerFiles {
+    doLast {
+        Files.copy(
+                new URL('http://connector.artifact.electrica.io/slack/0.0.1/channel.v1.yml').openStream(),
+                channelV1SwaggerFilePath,
+                StandardCopyOption.REPLACE_EXISTING
+        )
+    }
+}
+generateSwaggerCode.dependsOn downloadSwaggerFiles
+
+swaggerSources {
+    channelV1 {
+        code {
+            inputFile = channelV1SwaggerFilePath.toFile()
+            language = 'java'
+            configFile = file('./swagger/channel.v1.json')
+            outputDir = file("$buildDir/swagger-code")
+            components = ['models']
+            wipeOutputDir = false
+        }
+    }
+}

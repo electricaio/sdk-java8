@@ -1,0 +1,65 @@
+def versions = [
+        'api': "$api",
+        'core': "$core",
+        'slack': "$slack",
+        'echo': "$echo"
+]
+
+publishing {
+    repositories {
+        maven {
+            url System.env.AWS_S3_MAVEN_REPO_URL
+            credentials(AwsCredentials) {
+                accessKey System.env.AWS_ACCESS_KEY_ID
+                secretKey System.env.AWS_SECRET_ACCESS_KEY
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            pom {
+                packaging = 'pom'
+                name = 'Java 8 SDK BOM'
+                description = 'Java 8 SDK BOM artifact'
+//                    url = 'http://www.example.com/library'
+                licenses {
+                    license {
+                        name = 'GNU General Public License, Version 3'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/electricaio/sdk-java8'
+                    connection = 'scm:git:https://github.com/electricaio/sdk-java8.git'
+                }
+            }
+
+            pom.withXml {
+                def properties = asNode().appendNode('properties')
+                project.rootProject.subprojects.each {
+                    def moduleName = it.name
+                    if (moduleName != 'dependencies') {
+                        def version = versions[moduleName]
+                        if (version == null) {
+                            throw new IllegalArgumentException("Unknown version for module: ${moduleName}")
+                        }
+                        properties.appendNode("electrica-sdk-java-${moduleName}.version", version)
+                    }
+                }
+
+                def dependencyManagement = asNode().appendNode('dependencyManagement')
+                def dependencies = dependencyManagement.appendNode('dependencies')
+
+                project.rootProject.subprojects.each {
+                    def moduleName = it.name
+                    if (moduleName != 'dependencies') {
+                        Node dependency = dependencies.appendNode('dependency')
+                        dependency.appendNode('groupId').value = it.group
+                        dependency.appendNode('artifactId').value = moduleName
+                        dependency.appendNode('version').value = "\${electrica-sdk-java-${moduleName}.version}"
+                    }
+                }
+            }
+        }
+    }
+}

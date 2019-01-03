@@ -1,0 +1,8 @@
+version = "$core"
+
+dependencies {
+    compile project(':api')
+
+    compile "com.squareup.okhttp3:okhttp:$okhttp"
+    compile "com.google.code.gson:gson:$gson"
+}
