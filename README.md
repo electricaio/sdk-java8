@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/electricaio/sdk-java8.svg?token=z1JRjGpmpeeKYqo3ypqF&branch=master)](https://travis-ci.com/electricaio/sdk-java8)
+[![Coverage Status](https://coveralls.io/repos/github/electricaio/sdk-java8/badge.svg?t=cRCvXK)](https://coveralls.io/github/electricaio/sdk-java8)
+
 # About
 Electrica.io SDK libraries project for Java.
 
@@ -38,7 +41,7 @@ repositories {
 
 
 # Dependency management
-To not care about versions compatibility we provide BOM dependency `io.electrica.sdk.java:dependencies`, that allows
+To not care about versions compatibility we provide BOM dependency `io.electrica.sdk.java8:dependencies`, that allows
 customers use dependency management approach in their projects.
 
 ## Maven
@@ -48,7 +51,7 @@ The first and recommended is to import BOM dependency in `dependencyManagement` 
 ```
 <dependencies>
     <dependency>
-        <groupId>io.electrica.sdk.java</groupId>
+        <groupId>io.electrica.sdk.java8</groupId>
         <artifactId>slack</artifactId>
     </dependency>
 </dependencies>
@@ -56,7 +59,7 @@ The first and recommended is to import BOM dependency in `dependencyManagement` 
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>io.electrica.sdk.java</groupId>
+            <groupId>io.electrica.sdk.java8</groupId>
             <artifactId>dependencies</artifactId>
             <version>0.0.1</version>
             <type>pom</type>
@@ -70,14 +73,14 @@ Also is is possible to specify BOM dependency as a parent project, but you will 
 dependency and it doesn't work for subprojects.
 ```
 <parent>
-    <groupId>io.electrica.sdk.java</groupId>
+    <groupId>io.electrica.sdk.java8</groupId>
     <artifactId>dependencies</artifactId>
     <version>0.0.1</version>
 </parent>
 
 <dependencies>
     <dependency>
-        <groupId>io.electrica.sdk.java</groupId>
+        <groupId>io.electrica.sdk.java8</groupId>
         <artifactId>slack</artifactId>
     </dependency>
 </dependencies>
@@ -98,12 +101,12 @@ apply plugin: 'io.spring.dependency-management'
 
 dependencyManagement {
     imports {
-        mavenBom "io.electrica.sdk.java:dependencies:0.0.1"
+        mavenBom "io.electrica.sdk.java8:dependencies:0.0.1"
     }
 }
 
 dependencies {
-    compile 'io.electrica.sdk.java:slack'
+    compile 'io.electrica.sdk.java8:slack'
 }
 ```
 
@@ -121,11 +124,11 @@ dependencies {
 
 <dependencies>
     <dependency>
-        <groupId>io.electrica.sdk.java</groupId>
+        <groupId>io.electrica.sdk.java8</groupId>
         <artifactId>core-http</artifactId>
     </dependency>
     <dependency>
-        <groupId>io.electrica.sdk.java</groupId>
+        <groupId>io.electrica.sdk.java8</groupId>
         <artifactId>slack</artifactId>
     </dependency>
 </dependencies>
@@ -133,7 +136,7 @@ dependencies {
 <dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>io.electrica.sdk.java</groupId>
+            <groupId>io.electrica.sdk.java8</groupId>
             <artifactId>dependencies</artifactId>
             <version>0.0.1</version>
             <type>pom</type>
@@ -161,12 +164,12 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom "io.electrica.sdk.java:dependencies:0.0.1"
+        mavenBom "io.electrica.sdk.java8:dependencies:0.0.1"
     }
 }
 
 dependencies {
-    compile 'io.electrica.sdk.java:core-http'
-    compile 'io.electrica.sdk.java:slack'
+    compile 'io.electrica.sdk.java8:core-http'
+    compile 'io.electrica.sdk.java8:slack'
 }
 ```
