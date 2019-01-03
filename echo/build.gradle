@@ -1,18 +1,30 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 version = "$echo"
+
+def testV1SwaggerFilePath = Files.createTempFile('echo.test.v1.yml', null)
+
+task downloadSwaggerFiles {
+    doLast {
+        Files.copy(
+                new URL('http://connector.artifact.electrica.io/echo/0.0.1/test.v1.yml').openStream(),
+                testV1SwaggerFilePath,
+                StandardCopyOption.REPLACE_EXISTING
+        )
+    }
+}
+generateSwaggerCode.dependsOn downloadSwaggerFiles
 
 swaggerSources {
     testV1 {
-        inputFile = file('../../integration/echo/swagger/test.v1.yml')
         code {
+            inputFile = testV1SwaggerFilePath.toFile()
             language = 'java'
             configFile = file('./swagger/test.v1.json')
+            outputDir = file("$buildDir/swagger-code")
             components = ['models']
+            wipeOutputDir = false
         }
     }
 }
-
-// To include generated classes in classpath.
-compileJava.dependsOn swaggerSources.testV1.code
-
-sourceSets.main.java.srcDir "${swaggerSources.testV1.code.outputDir}/src/main/java"
-sourceSets.main.resources.srcDir "${swaggerSources.testV1.code.outputDir}/src/main/resources"
