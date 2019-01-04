@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.com/electricaio/sdk-java8.svg?token=z1JRjGpmpeeKYqo3ypqF&branch=master)](https://travis-ci.com/electricaio/sdk-java8)
-[![Coverage Status](https://coveralls.io/repos/github/electricaio/sdk-java8/badge.svg?t=cRCvXK)](https://coveralls.io/github/electricaio/sdk-java8)
+[![Coverage Status](https://coveralls.io/repos/github/electricaio/sdk-java8/badge.svg?branch=master&t=cRCvXK)](https://coveralls.io/github/electricaio/sdk-java8?branch=master)
 
 # About
 Electrica.io SDK libraries project for Java.
