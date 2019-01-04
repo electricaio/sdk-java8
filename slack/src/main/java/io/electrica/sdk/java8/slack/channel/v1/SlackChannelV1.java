@@ -4,7 +4,7 @@ import io.electrica.sdk.java8.api.Callback;
 import io.electrica.sdk.java8.api.Connection;
 import io.electrica.sdk.java8.api.exception.IntegrationException;
 import io.electrica.sdk.java8.slack.channel.v1.model.SlackChannelV1Action;
-import io.electrica.sdk.java8.slack.channel.v1.model.SlackChannelV2SendTextPayload;
+import io.electrica.sdk.java8.slack.channel.v1.model.SlackChannelV1SendTextPayload;
 import lombok.Getter;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -39,7 +39,7 @@ public class SlackChannelV1 implements AutoCloseable {
         connection.invoke(
                 SlackChannelV1Action.SENDTEXT,
                 null,
-                new SlackChannelV2SendTextPayload().message(message),
+                new SlackChannelV1SendTextPayload().message(message),
                 timeout,
                 unit
         );
@@ -49,7 +49,7 @@ public class SlackChannelV1 implements AutoCloseable {
         connection.submit(
                 SlackChannelV1Action.SENDTEXT,
                 null,
-                new SlackChannelV2SendTextPayload().message(message),
+                new SlackChannelV1SendTextPayload().message(message),
                 callback
         );
     }
