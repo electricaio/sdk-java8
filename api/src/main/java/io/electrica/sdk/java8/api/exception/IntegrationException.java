@@ -1,6 +1,7 @@
 package io.electrica.sdk.java8.api.exception;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 public class IntegrationException extends Exception {
 
@@ -25,5 +26,15 @@ public class IntegrationException extends Exception {
 
     public List<String> getPayload() {
         return payload;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", IntegrationException.class.getSimpleName() + "[", "]")
+                .add("message='" + getMessage() + "'")
+                .add("code='" + code + "'")
+                .add("stackTrace='" + stackTrace + "'")
+                .add("payload=" + payload)
+                .toString();
     }
 }

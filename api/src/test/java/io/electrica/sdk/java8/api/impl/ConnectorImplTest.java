@@ -27,7 +27,7 @@ class ConnectorImplTest {
         Electrica electrica = Electrica.instance(httpModule, accessKey);
 
         Long connectionId = 100L;
-        String connectionName = ConnectorImpl.DEFAULT_CONNECTION;
+        String connectionName = Connection.DEFAULT_NAME;
         Map<String, String> connectionProperties = new HashMap<>();
 
         ConnectionInfo info = mock(ConnectionInfo.class);

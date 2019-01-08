@@ -52,6 +52,8 @@ subprojects {
             annotationProcessor "org.projectlombok:lombok:$lombok"
 
             testCompile "org.mockito:mockito-core:$mockito"
+            testCompileOnly "org.projectlombok:lombok:$lombok"
+            testAnnotationProcessor "org.projectlombok:lombok:$lombok"
 
             testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiter"
             testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiter"

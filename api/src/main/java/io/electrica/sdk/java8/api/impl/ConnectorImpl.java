@@ -21,8 +21,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ConnectorImpl implements Connector {
 
-    static final String DEFAULT_CONNECTION = "Default";
-
     private final Electrica electrica;
     private final String ern;
 
@@ -68,7 +66,7 @@ public final class ConnectorImpl implements Connector {
 
     @Override
     public Connection defaultConnection() {
-        return connection(DEFAULT_CONNECTION);
+        return connection(Connection.DEFAULT_NAME);
     }
 
     @Override

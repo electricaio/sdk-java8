@@ -11,6 +11,8 @@ import java.util.concurrent.TimeoutException;
 
 public class EchoTestV1 implements AutoCloseable {
 
+    public static final String ERN = "ern://echo:test:1";
+
     private final Connection connection;
 
     public EchoTestV1(Connection connection) {

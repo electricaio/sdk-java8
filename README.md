@@ -34,7 +34,7 @@ Specify repository in your `build.gradle`
 ```
 repositories {
     maven {
-        url "http://maven-repo.electrica.io"
+        url 'http://maven-repo.electrica.io'
     }
 }
 ```
@@ -52,7 +52,7 @@ The first and recommended is to import BOM dependency in `dependencyManagement` 
 <dependencies>
     <dependency>
         <groupId>io.electrica.sdk.java8</groupId>
-        <artifactId>slack</artifactId>
+        <artifactId>echo</artifactId>
     </dependency>
 </dependencies>
 
@@ -69,7 +69,7 @@ The first and recommended is to import BOM dependency in `dependencyManagement` 
 </dependencyManagement>
 ```
 
-Also is is possible to specify BOM dependency as a parent project, but you will constrained to use only one BOM
+Also it is possible to specify BOM dependency as a parent project, but you will constrained to use only one BOM
 dependency and it doesn't work for subprojects.
 ```
 <parent>
@@ -81,7 +81,7 @@ dependency and it doesn't work for subprojects.
 <dependencies>
     <dependency>
         <groupId>io.electrica.sdk.java8</groupId>
-        <artifactId>slack</artifactId>
+        <artifactId>echo</artifactId>
     </dependency>
 </dependencies>
 ```
@@ -89,7 +89,7 @@ dependency and it doesn't work for subprojects.
 Maven provide a simple way to override version of any dependency in BOM using properties:
 ```
 <properties>
-  <sdk-java-core.version>0.0.2</sdk-java-core.version>
+  <electrica-sdk-java8-echo.version>0.0.2</electrica-sdk-java8-echo.version>
 </properties>
 ```
 See full list of properties in `dependencies` module pom.
@@ -101,12 +101,12 @@ apply plugin: 'io.spring.dependency-management'
 
 dependencyManagement {
     imports {
-        mavenBom "io.electrica.sdk.java8:dependencies:0.0.1"
+        mavenBom 'io.electrica.sdk.java8:dependencies:0.0.1'
     }
 }
 
 dependencies {
-    compile 'io.electrica.sdk.java8:slack'
+    compile 'io.electrica.sdk.java8:echo'
 }
 ```
 
@@ -125,11 +125,11 @@ dependencies {
 <dependencies>
     <dependency>
         <groupId>io.electrica.sdk.java8</groupId>
-        <artifactId>core-http</artifactId>
+        <artifactId>core</artifactId>
     </dependency>
     <dependency>
         <groupId>io.electrica.sdk.java8</groupId>
-        <artifactId>slack</artifactId>
+        <artifactId>echo</artifactId>
     </dependency>
 </dependencies>
 
@@ -150,7 +150,7 @@ dependencies {
 ```
 plugins {
     id 'java'
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -158,18 +158,18 @@ apply plugin: 'io.spring.dependency-management'
 repositories {
     mavenCentral()
     maven {
-        url "http://maven-repo.electrica.io"
+        url 'http://maven-repo.electrica.io'
     }
 }
 
 dependencyManagement {
     imports {
-        mavenBom "io.electrica.sdk.java8:dependencies:0.0.1"
+        mavenBom 'io.electrica.sdk.java8:dependencies:0.0.1'
     }
 }
 
 dependencies {
-    compile 'io.electrica.sdk.java8:core-http'
-    compile 'io.electrica.sdk.java8:slack'
+    compile 'io.electrica.sdk.java8:core'
+    compile 'io.electrica.sdk.java8:echo'
 }
 ```
