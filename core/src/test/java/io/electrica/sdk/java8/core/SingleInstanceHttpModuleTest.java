@@ -30,20 +30,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class SingleInstanceHttpModuleTest {
 
     private static final String API_URL = "http://api.dev.electrica.io";
-    private static final UUID WEBHOOK_ID = UUID.fromString("5766130e-154e-4ce4-b5fd-eefe7afaee40");
+    private static final UUID WEBHOOK_ID = UUID.fromString("155bb5db-3a71-4bc3-93e1-f2c50f64e7f7");
     private static final String WEBHOOK_URL = API_URL + "/v1/webhooks/" + WEBHOOK_ID;
     private static final String WEBHOOK_NAME = "Default";
     private static final String ECHO_MESSAGE = "Test echo message";
     private static final String CONNECTION_NOT_FOUND_MESSAGE = "Connection not found by name: ";
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     private static final String ACCESS_KEY = "" +
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYyIsInUiLCJjaCIsInciLCJpIiwid3MiXSwidXNlcl9uYW1lIjoiQ" +
-            "GlkOjEiLCJzY29wZSI6WyJyIiwic2RrIl0sImV4cCI6MzY5NDQ0NzM3OCwiaWF0IjoxNTQ2OTYzNzMxLCJhdXRob3JpdGllcyI6WyJ" +
-            "rZXk6MSIsIm9yZzoyIl0sImp0aSI6IjdkNTdmMjY0LWMwZTctNDgwNS1hMTMxLTgzODhjNzc5MTE5YiIsImNsaWVudF9pZCI6ImFjY" +
-            "2Vzc0tleSJ9.a9pw59ENqlTtCgJ04IgrR6Dmzr8xFpqzPTZoqSX2c2pXw-bLfz_ZO62CXO_pbGpxCZY5Ny1I2-dtTXliYEi6E2aUww" +
-            "ArTQmPX1M8iWQPFbA_AnvCbm7G_Gdi8QuJrEWz3rEyxpV90xdCoBlWifZb0uYj8F58ElP5O7w5n16oCFu0KeUmvZrDFV0pn-javawn" +
-            "HNjOBnGC_gJWImsPgIjCsgn8aWGy0-wuCmGzcYCSOLA9qQ-xiPO6WXrmCLcJUW2m0vO8kp5wMOhK-0soJSm8m3eUucUUY0kgc4IMVF" +
-            "iuRoM-uGV5wmSzkN8zCGrL6Am1jwQ9Uxx7VZrPWv3oGqBgBw";
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYyIsInUiLCJjaCIsInciLCJpIiwid3MiXSwidXNlcl9uYW1lIjoiQG" +
+            "lkOjEiLCJzY29wZSI6WyJyIiwic2RrIl0sImV4cCI6MzY5NDU0OTM1MywiaWF0IjoxNTQ3MDY1NzA2LCJhdXRob3JpdGllcyI6WyJrZ" +
+            "Xk6MSIsIm9yZzoyIl0sImp0aSI6IjlmNWFlN2M3LTZiYzItNDYxMC1iZGI5LWRjZDA1YmM2MWFhZiIsImNsaWVudF9pZCI6ImFjY2Vz" +
+            "c0tleSJ9.S5bMo5_J3WL9REa90vkP1GZXKIO9Cu4tXfyQMfqiCpSU8jVP4gQE0aTfAHbF4qLipbbroKRFVCEZW0SMibx0hqGntfEfSF" +
+            "eCFInaMM3IGP2YYzQrrl14j2NSkXd3kRU2NuwxDY7HovZU-9CUA8sPqQWn-Z3_eTvwLIJrR06vdbZMiv9--FhoeIFpKurMubnOzRK-S" +
+            "3JzN-7XRcsxCV5LttLaPSIYHym9GJ6G9zY9SigBKqup0PbhuA8yLL12s7g6-QMYyA7V6g1HOFNMcwpBmJUUmGSJwktmY8TeyXH14PzV" +
+            "itVXIcUcX8vxJp9ZcULklSsg5lZ0hd2yEi1kGmp2PQ";
 
     private static Electrica electrica;
     private static OkHttpClient httpClient;

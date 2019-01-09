@@ -86,7 +86,7 @@ dependency and it doesn't work for subprojects.
 </dependencies>
 ```
 
-Maven provide a simple way to override version of any dependency in BOM using properties:
+Maven provides a simple way to override the version of any dependency in BOM using properties:
 ```
 <properties>
   <electrica-sdk-java8-echo.version>0.0.2</electrica-sdk-java8-echo.version>
