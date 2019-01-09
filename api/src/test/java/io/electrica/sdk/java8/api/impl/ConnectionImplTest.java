@@ -31,7 +31,7 @@ class ConnectionImplTest {
         Electrica electrica = Electrica.instance(httpModule, accessKey);
 
         Long connectionId = 100L;
-        String connectionName = ConnectorImpl.DEFAULT_CONNECTION;
+        String connectionName = Connection.DEFAULT_NAME;
         Map<String, String> connectionProperties = new HashMap<>();
         connectionProperties.put("number", "100");
         connectionProperties.put("boolean", "true");

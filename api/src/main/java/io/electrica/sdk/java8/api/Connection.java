@@ -10,6 +10,8 @@ import java.util.function.Predicate;
  */
 public interface Connection extends Invocable, ConnectionProperties, AutoCloseable {
 
+    String DEFAULT_NAME = "Default";
+
     Connector getConnector();
 
     Long getId();

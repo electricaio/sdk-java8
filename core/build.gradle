@@ -5,4 +5,7 @@ dependencies {
 
     compile "com.squareup.okhttp3:okhttp:$okhttp"
     compile "com.google.code.gson:gson:$gson"
+
+    testCompile project(':echo')
+    testCompile 'ch.qos.logback:logback-classic:1.0.13'
 }

@@ -43,7 +43,7 @@ publishing {
                         if (version == null) {
                             throw new IllegalArgumentException("Unknown version for module: ${moduleName}")
                         }
-                        properties.appendNode("electrica-sdk-java-${moduleName}.version", version)
+                        properties.appendNode("electrica-sdk-java8-${moduleName}.version", version)
                     }
                 }
 
@@ -56,7 +56,7 @@ publishing {
                         Node dependency = dependencies.appendNode('dependency')
                         dependency.appendNode('groupId').value = it.group
                         dependency.appendNode('artifactId').value = moduleName
-                        dependency.appendNode('version').value = "\${electrica-sdk-java-${moduleName}.version}"
+                        dependency.appendNode('version').value = "\${electrica-sdk-java8-${moduleName}.version}"
                     }
                 }
             }
