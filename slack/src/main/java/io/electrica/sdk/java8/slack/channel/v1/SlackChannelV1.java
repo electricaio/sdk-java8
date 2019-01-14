@@ -5,33 +5,39 @@ import io.electrica.sdk.java8.api.Connection;
 import io.electrica.sdk.java8.api.exception.IntegrationException;
 import io.electrica.sdk.java8.slack.channel.v1.model.SlackChannelV1Action;
 import io.electrica.sdk.java8.slack.channel.v1.model.SlackChannelV1SendTextPayload;
-import lombok.Getter;
 
 import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-@Getter
 @ThreadSafe
 public class SlackChannelV1 implements AutoCloseable {
 
     public static final String CHANNEL_NAME_PROPERTY_KEY = "channel.name";
 
     private final Connection connection;
-    private final long defaultTimeout;
+    private final long timeout;
 
     public SlackChannelV1(Connection connection) {
-        this(connection, TimeUnit.SECONDS.toMillis(60));
+        this(connection, SlackChannelV1Manager.DEFAULT_TIMEOUT);
     }
 
-    public SlackChannelV1(Connection connection, long defaultTimeout) {
+    public SlackChannelV1(Connection connection, long timeout) {
         this.connection = connection;
-        this.defaultTimeout = defaultTimeout;
+        this.timeout = timeout;
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public long getTimeout() {
+        return timeout;
     }
 
     public void send(String message) throws IntegrationException, IOException, TimeoutException {
-        send(message, defaultTimeout, TimeUnit.SECONDS);
+        send(message, timeout, TimeUnit.MILLISECONDS);
     }
 
     public void send(String message, long timeout, TimeUnit unit)

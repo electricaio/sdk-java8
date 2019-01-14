@@ -53,13 +53,9 @@ class SingleInstanceHttpModuleTest {
     }
 
     @AfterAll
-    static void tearDown() {
-        try {
-            httpClient.dispatcher().cancelAll();
-            electrica.close();
-        } catch (Exception e) {
-            fail("Electrica instance Close exception", e);
-        }
+    static void tearDown() throws Exception {
+        httpClient.dispatcher().cancelAll();
+        electrica.close();
     }
 
     private static <T> T awaitResultFromQueue(BlockingQueue<T> queue) throws InterruptedException {
