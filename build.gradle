@@ -73,6 +73,8 @@ subprojects {
                 compile "com.google.code.gson:gson:$gson"
                 compile "io.swagger:swagger-annotations:$swaggerAnnotations"
 
+                testCompile project(':core')
+                
                 swaggerCodegen "io.swagger:swagger-codegen-cli:$swaggerCodegenCli"
             }
 
