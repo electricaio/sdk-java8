@@ -19,6 +19,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -29,21 +31,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SingleInstanceHttpModuleTest {
 
-    private static final String API_URL = "http://api.dev.electrica.io";
-    private static final UUID WEBHOOK_ID = UUID.fromString("155bb5db-3a71-4bc3-93e1-f2c50f64e7f7");
-    private static final String WEBHOOK_URL = API_URL + "/v1/webhooks/" + WEBHOOK_ID;
+    private static final UUID WEBHOOK_ID = UUID.fromString("6e80f769-e655-49b0-a131-6bc63aab55a1");
+    private static final String WEBHOOK_URL = TestUtils.getApiUrl() + "/v1/webhooks/" + WEBHOOK_ID;
     private static final String WEBHOOK_NAME = "Default";
+    private static final Map<String, String> WEBHOOK_PROPERTIES =
+            Collections.singletonMap("some.test.property", "testValue");
+
+    private static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     private static final String ECHO_MESSAGE = "Test echo message";
     private static final String CONNECTION_NOT_FOUND_MESSAGE = "Connection not found by name: ";
-    private static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
-    private static final String ACCESS_KEY = "" +
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYyIsInUiLCJjaCIsInciLCJpIiwid3MiXSwidXNlcl9uYW1lIjoiQG" +
-            "lkOjEiLCJzY29wZSI6WyJyIiwic2RrIl0sImV4cCI6MzY5NDU0OTM1MywiaWF0IjoxNTQ3MDY1NzA2LCJhdXRob3JpdGllcyI6WyJrZ" +
-            "Xk6MSIsIm9yZzoyIl0sImp0aSI6IjlmNWFlN2M3LTZiYzItNDYxMC1iZGI5LWRjZDA1YmM2MWFhZiIsImNsaWVudF9pZCI6ImFjY2Vz" +
-            "c0tleSJ9.S5bMo5_J3WL9REa90vkP1GZXKIO9Cu4tXfyQMfqiCpSU8jVP4gQE0aTfAHbF4qLipbbroKRFVCEZW0SMibx0hqGntfEfSF" +
-            "eCFInaMM3IGP2YYzQrrl14j2NSkXd3kRU2NuwxDY7HovZU-9CUA8sPqQWn-Z3_eTvwLIJrR06vdbZMiv9--FhoeIFpKurMubnOzRK-S" +
-            "3JzN-7XRcsxCV5LttLaPSIYHym9GJ6G9zY9SigBKqup0PbhuA8yLL12s7g6-QMYyA7V6g1HOFNMcwpBmJUUmGSJwktmY8TeyXH14PzV" +
-            "itVXIcUcX8vxJp9ZcULklSsg5lZ0hd2yEi1kGmp2PQ";
 
     private static Electrica electrica;
     private static OkHttpClient httpClient;
@@ -53,8 +49,7 @@ class SingleInstanceHttpModuleTest {
     @BeforeAll
     static void setUp() {
         httpClient = new OkHttpClient.Builder().build();
-        SingleInstanceHttpModule httpModule = new SingleInstanceHttpModule(API_URL);
-        electrica = Electrica.instance(httpModule, ACCESS_KEY);
+        electrica = TestUtils.createElectrica();
     }
 
     @AfterAll
@@ -82,7 +77,7 @@ class SingleInstanceHttpModuleTest {
         assertNull(message.getConnectorId());
         assertNull(message.getConnectorErn());
         assertEquals(connection.getId(), message.getConnectionId());
-        assertNull(message.getPropertiesMap()); //TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+        assertEquals(WEBHOOK_PROPERTIES, message.getPropertiesMap());
         assertEquals(isExpectedResult, message.getExpectedResult());
         assertEquals(WebhookMessage.INSTANCE, message.getPayload(WebhookMessage.class));
     }
@@ -348,7 +343,7 @@ class SingleInstanceHttpModuleTest {
     private Response postWebhookMessage(String actionSuffix) throws IOException {
         Request request = new Request.Builder()
                 .url(WEBHOOK_URL + actionSuffix)
-                .header("Authorization", "Bearer " + ACCESS_KEY)
+                .header("Authorization", "Bearer " + TestUtils.getAccessKey())
                 .post(RequestBody.create(MEDIA_TYPE, gson.toJson(WebhookMessage.INSTANCE)))
                 .build();
         Response response = httpClient.newCall(request).execute();
