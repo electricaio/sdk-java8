@@ -14,6 +14,14 @@ public interface Message {
 
     String getName();
 
+    Long getOrganizationId();
+
+    Long getUserId();
+
+    Long getAccessKeyId();
+
+    boolean isPublic();
+
     Scope getScope();
 
     /**
