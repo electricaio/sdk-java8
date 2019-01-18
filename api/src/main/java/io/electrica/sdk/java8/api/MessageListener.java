@@ -4,6 +4,7 @@ import io.electrica.sdk.java8.api.http.Message;
 
 import java.util.Optional;
 
+@FunctionalInterface
 public interface MessageListener {
 
     /**

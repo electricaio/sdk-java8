@@ -26,6 +26,8 @@ public class MessageDto {
 
     private Long accessKeyId;
 
+    private Boolean isPublic;
+
     private Message.Scope scope;
 
     @Nullable

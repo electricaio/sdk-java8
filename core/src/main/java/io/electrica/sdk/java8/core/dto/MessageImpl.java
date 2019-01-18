@@ -40,6 +40,26 @@ public class MessageImpl implements Message {
     }
 
     @Override
+    public Long getOrganizationId() {
+        return dto.getOrganizationId();
+    }
+
+    @Override
+    public Long getUserId() {
+        return dto.getUserId();
+    }
+
+    @Override
+    public Long getAccessKeyId() {
+        return dto.getAccessKeyId();
+    }
+
+    @Override
+    public boolean isPublic() {
+        return dto.getIsPublic();
+    }
+
+    @Override
     public Scope getScope() {
         return dto.getScope();
     }
