@@ -1,0 +1,7 @@
+{
+  "dateLibrary": "java8",
+  "hideGenerationTimestamp": true,
+  "modelPackage": "io.electrica.sdk.java8.hackerrank.tests.v1.model",
+  "invokerPackage": "io.electrica.sdk.java8",
+  "useBeanValidation": false
+}
