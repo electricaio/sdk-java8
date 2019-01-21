@@ -3,7 +3,7 @@ import java.nio.file.StandardCopyOption
 
 version = "$hackerrank"
 
-def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank.tests.v1.yml', null)
+def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.yml', null)
 
 task downloadSwaggerFiles {
     doLast {
@@ -21,14 +21,10 @@ swaggerSources {
         code {
             inputFile = hackerrankWorkV1SwaggerFilePath.toFile()
             language = 'java'
-            configFile = file('./swagger/tests.v1.json')
+            configFile = file('./swagger/hackerrank-v3.tests.json')
             outputDir = file("$buildDir/swagger-code")
             components = ['models']
             wipeOutputDir = false
         }
     }
-}
-
-dependencies {
-    testCompile 'com.squareup.okhttp3:mockwebserver:3.11.0'
 }
