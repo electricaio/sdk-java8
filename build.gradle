@@ -204,7 +204,7 @@ task jacocoRootReport(type: JacocoReport, group: 'Coverage reports') {
 }
 
 coveralls {
-    sourceDirs = projects.sourceSets.main.allSource.srcDirs.flatten()
+    sourceDirs = projects.sourceSets.main.allSource.srcDirs.flatten().findAll {file -> !file.getPath().contains("swagger-code") }
     jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 

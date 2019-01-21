@@ -146,7 +146,7 @@ class HackerRankTestsV1Test {
     }
 
     @Test
-    void getTestAsynchronous() throws Exception {
+    void getIndividualTestAsynchronous() throws Exception {
         HackerRankV3TestsShowResponse response = new HackerRankV3TestsShowResponse();
         String id = "hacker rank show response";
         response.setId(id);
@@ -174,7 +174,7 @@ class HackerRankTestsV1Test {
     }
 
     @Test
-    void getTestSynchronous() throws Exception {
+    void getIndividualTestSynchronously() throws Exception {
         String id = "hacker rank show response";
         HackerRankV3TestsShowResponse response = new HackerRankV3TestsShowResponse();
         response.setId(id);
@@ -185,7 +185,7 @@ class HackerRankTestsV1Test {
     }
 
     @Test
-    void getAllTestsAsynchronous() throws Exception {
+    void getAllTestsAsynchronously() throws Exception {
         String id = "hackerrank index id";
         HackerRankV3TestsIndexResponse response = createIndexResponse(id);
 
@@ -211,7 +211,7 @@ class HackerRankTestsV1Test {
     }
 
     @Test
-    void getAllTestsSynchronous() throws Exception {
+    void getAllTestsSynchronously() throws Exception {
         String id = "hackerrank index id";
         HackerRankV3TestsIndexResponse response = createIndexResponse(id);
         setServerDispatcher(response);
