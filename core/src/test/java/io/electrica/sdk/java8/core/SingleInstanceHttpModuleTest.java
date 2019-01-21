@@ -5,10 +5,13 @@ import io.electrica.sdk.java8.api.Callback;
 import io.electrica.sdk.java8.api.Connection;
 import io.electrica.sdk.java8.api.Connector;
 import io.electrica.sdk.java8.api.Electrica;
+import io.electrica.sdk.java8.api.MessageListener;
 import io.electrica.sdk.java8.api.exception.ConnectionNotFoundException;
 import io.electrica.sdk.java8.api.exception.IntegrationException;
 import io.electrica.sdk.java8.api.http.Message;
 import io.electrica.sdk.java8.echo.test.v1.EchoTestV1;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,17 +24,18 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SingleInstanceHttpModuleTest {
 
-    private static final UUID WEBHOOK_ID = UUID.fromString("6e80f769-e655-49b0-a131-6bc63aab55a1");
+    private static final UUID WEBHOOK_ID = UUID.fromString("3afc6d4d-a0bd-4434-8eba-e982c5d7fb4f");
     private static final String WEBHOOK_URL = TestUtils.getApiUrl() + "/v1/webhooks/" + WEBHOOK_ID;
     private static final String WEBHOOK_NAME = "Default";
     private static final Map<String, String> WEBHOOK_PROPERTIES =
@@ -40,11 +44,11 @@ class SingleInstanceHttpModuleTest {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json");
     private static final String ECHO_MESSAGE = "Test echo message";
     private static final String CONNECTION_NOT_FOUND_MESSAGE = "Connection not found by name: ";
+    private static final  Gson gson = new Gson();
 
     private static Electrica electrica;
     private static OkHttpClient httpClient;
 
-    private Gson gson = new Gson();
 
     @BeforeAll
     static void setUp() {
@@ -58,10 +62,14 @@ class SingleInstanceHttpModuleTest {
         electrica.close();
     }
 
-    private static <T> T awaitResultFromQueue(BlockingQueue<T> queue) throws InterruptedException {
-        T result = queue.poll(30, TimeUnit.SECONDS);
-        assertNotNull(result, "Waiting of result timed out");
-        return result;
+    private static <T> T awaitResultFromQueue(BlockingQueue<T> queue) {
+        try {
+            T result = queue.poll(30, TimeUnit.SECONDS);
+            assertNotNull(result, "Waiting of result timed out");
+            return result;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void assertMessage(Connection connection, Message message, boolean isExpectedResult) {
@@ -75,7 +83,7 @@ class SingleInstanceHttpModuleTest {
         assertEquals(connection.getId(), message.getConnectionId());
         assertEquals(WEBHOOK_PROPERTIES, message.getPropertiesMap());
         assertEquals(isExpectedResult, message.getExpectedResult());
-        assertEquals(WebhookMessage.INSTANCE, message.getPayload(WebhookMessage.class));
+        assertEquals(WebhookMessage.INSTANCE, gson.fromJson(message.getPayload(), WebhookMessage.class));
     }
 
     @Test
@@ -196,144 +204,56 @@ class SingleInstanceHttpModuleTest {
     void submitMessageTest() throws Exception {
         Connection connection = createEchoDefaultConnection();
 
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.empty();
-        });
+        UUIDMessageSupplier uuidMessageSupplier = addListener(connection, __ -> true, __ -> null);
 
         postWebhookMessage("/submit");
 
-        Message message = awaitResultFromQueue(queue);
+        Message message = uuidMessageSupplier.getMessage();
         assertMessage(connection, message, false);
 
-        connection.removeMessageListener(uuid);
-    }
-
-    @Test
-    void invokeMessageReturnObjectTest() throws Exception {
-        Connection connection = createEchoDefaultConnection();
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.of(WebhookMessage.INSTANCE);
-        });
-
-        Response response = postWebhookMessage("/invoke");
-
-        Message message = awaitResultFromQueue(queue);
-        assertMessage(connection, message, true);
-
-        WebhookMessage result = gson.fromJson(response.body().string(), WebhookMessage.class);
-        assertEquals(WebhookMessage.INSTANCE, result);
-
-        connection.removeMessageListener(uuid);
+        connection.removeMessageListener(uuidMessageSupplier.getUuid());
     }
 
     @Test
     void invokeMessageReturnStringTest() throws Exception {
         Connection connection = createEchoDefaultConnection();
         String expectedResult = "Test string return result";
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.of(expectedResult);
-        });
+        UUIDMessageSupplier uuidSupplierPair = addListener(connection, p -> true, __ -> expectedResult);
 
         Response response = postWebhookMessage("/invoke");
 
-        Message message = awaitResultFromQueue(queue);
+        Message message = uuidSupplierPair.getMessage();
         assertMessage(connection, message, true);
 
-        // TODO Fix additional string wrapping on backend !!!!
-        assertEquals('"' + expectedResult + '"', response.body().string());
+        assertEquals(expectedResult, response.body().string());
 
-        connection.removeMessageListener(uuid);
-    }
-
-    @Test
-    void invokeMessageReturnIntegerTest() throws Exception {
-        Connection connection = createEchoDefaultConnection();
-        int expectedResult = 23874624;
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.of(expectedResult);
-        });
-
-        Response response = postWebhookMessage("/invoke");
-
-        Message message = awaitResultFromQueue(queue);
-        assertMessage(connection, message, true);
-
-        assertEquals(expectedResult, Integer.parseInt(response.body().string()));
-
-        connection.removeMessageListener(uuid);
-    }
-
-    @Test
-    void invokeMessageReturnBooleanTest() throws Exception {
-        Connection connection = createEchoDefaultConnection();
-        boolean expectedResult = true;
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.of(expectedResult);
-        });
-
-        Response response = postWebhookMessage("/invoke");
-
-        Message message = awaitResultFromQueue(queue);
-        assertMessage(connection, message, true);
-
-        assertEquals(expectedResult, Boolean.parseBoolean(response.body().string()));
-
-        connection.removeMessageListener(uuid);
-    }
-
-    @Test
-    void invokeMessageReturnDoubleTest() throws Exception {
-        Connection connection = createEchoDefaultConnection();
-        double expectedResult = 3.14;
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.of(expectedResult);
-        });
-
-        Response response = postWebhookMessage("/invoke");
-
-        Message message = awaitResultFromQueue(queue);
-        assertMessage(connection, message, true);
-
-        assertEquals(expectedResult, Double.parseDouble(response.body().string()));
-
-        connection.removeMessageListener(uuid);
+        connection.removeMessageListener(uuidSupplierPair.getUuid());
     }
 
     @Test
     void invokeMessageReturnNothingTest() throws Exception {
         Connection connection = createEchoDefaultConnection();
-
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
-        UUID uuid = connection.addMessageListener(p -> true, message -> {
-            queue.add(message);
-            return Optional.empty();
-        });
+        UUIDMessageSupplier uuidMessageSupplier = addListener(connection, __ -> true, __ -> null);
 
         Response response = postWebhookMessage("/invoke");
 
-        Message message = awaitResultFromQueue(queue);
+        Message message = uuidMessageSupplier.getMessage();
         assertMessage(connection, message, true);
 
-        assertEquals("null", response.body().string());
+        String strResponse = response.body().string();
+        assertTrue(strResponse == null || strResponse.isEmpty());
 
-        connection.removeMessageListener(uuid);
+        connection.removeMessageListener(uuidMessageSupplier.getUuid());
+    }
+
+    private static UUIDMessageSupplier addListener(Connection connection, Predicate<Message> filter,
+                                                      MessageListener listener) {
+        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(1);
+        UUID uuid = connection.addMessageListener(filter, message -> {
+            queue.add(message);
+            return listener.onMessage(message);
+        });
+        return new UUIDMessageSupplier(uuid, () -> awaitResultFromQueue(queue));
     }
 
     private Response postWebhookMessage(String actionSuffix) throws IOException {
@@ -394,5 +314,17 @@ class SingleInstanceHttpModuleTest {
         private String stringField;
         private Integer integerField;
         private Boolean booleanField;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    private static class UUIDMessageSupplier {
+        private UUID uuid;
+        @Getter(AccessLevel.NONE)
+        private Supplier<Message> messageSupplier;
+
+        public Message getMessage() {
+            return messageSupplier.get();
+        }
     }
 }

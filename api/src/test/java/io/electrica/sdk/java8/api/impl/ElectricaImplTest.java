@@ -5,7 +5,6 @@ import io.electrica.sdk.java8.api.Electrica;
 import io.electrica.sdk.java8.api.http.HttpModule;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -72,7 +71,7 @@ class ElectricaImplTest {
         try (Electrica electrica = Electrica.instance(httpModule, accessKey)) {
             electricaFef = electrica;
 
-            uuid = electrica.addMessageListener(Predicate.isEqual(null), message -> Optional.empty());
+            uuid = electrica.addMessageListener(Predicate.isEqual(null), message -> null);
             electrica.removeMessageListener(uuid);
         }
 

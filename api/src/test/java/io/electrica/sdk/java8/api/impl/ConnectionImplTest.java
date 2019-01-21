@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -195,7 +194,7 @@ class ConnectionImplTest {
 
         UUID uuid;
         try (Connection connection = new ConnectionImpl(connector, info)) {
-            uuid = connection.addMessageListener(Predicate.isEqual(null), message -> Optional.empty());
+            uuid = connection.addMessageListener(Predicate.isEqual(null), message -> null);
             connection.removeMessageListener(uuid);
         }
 

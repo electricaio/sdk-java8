@@ -8,7 +8,6 @@ import io.electrica.sdk.java8.api.http.Message;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -86,9 +85,9 @@ public class ElectricaImpl implements Electrica {
 
         return httpModule.addMessageListener(instanceId, filter, message -> {
             try {
-                Optional<Object> result = listener.onMessage(message);
+                String result = listener.onMessage(message);
                 if (message.getExpectedResult()) {
-                    httpModule.sendMessageResult(instanceId, message, result.orElse(null));
+                    httpModule.sendMessageResult(instanceId, message, result);
                 }
             } catch (Exception e) {
                 log.error("Error handling message", e);

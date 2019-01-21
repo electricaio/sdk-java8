@@ -46,7 +46,20 @@ public interface Message {
 
     Boolean getExpectedResult();
 
-    <T> T getPayload(Class<T> type);
+    /**
+     * MediaType according to 'Content-Type' header.
+     */
+    String getContentType();
+
+    /**
+     * MediaType according to 'Accept' header. Null if expected result is false.
+     */
+    String getExpectedContentType();
+
+    /**
+     * Body of webhook request.
+     */
+    String getPayload();
 
     enum Scope {
         Connector, Connection, Custom

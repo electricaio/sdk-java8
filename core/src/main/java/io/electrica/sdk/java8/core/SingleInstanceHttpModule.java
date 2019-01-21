@@ -209,7 +209,7 @@ public class SingleInstanceHttpModule implements HttpModule {
     }
 
     @Override
-    public void sendMessageResult(UUID instanceId, Message message, @Nullable Object result) throws IOException {
+    public void sendMessageResult(UUID instanceId, Message message, @Nullable String result) throws IOException {
         checkClosed();
 
         String url = apiUrl + MESSAGE_RESULT_PATH;

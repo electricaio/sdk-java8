@@ -15,9 +15,9 @@ public class MessageResultDto {
     private final UUID webhookId;
     private final UUID sdkInstanceId;
     private final UUID webhookServiceId;
-    private final Object payload;
+    private final String payload;
 
-    public static MessageResultDto of(UUID instanceId, Message message, @Nullable Object payload) {
+    public static MessageResultDto of(UUID instanceId, Message message, @Nullable String payload) {
         return new MessageResultDto(
                 message.getId(),
                 message.getWebhookId(),

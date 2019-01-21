@@ -2,7 +2,7 @@ package io.electrica.sdk.java8.api;
 
 import io.electrica.sdk.java8.api.http.Message;
 
-import java.util.Optional;
+import javax.annotation.Nullable;
 
 @FunctionalInterface
 public interface MessageListener {
@@ -13,10 +13,9 @@ public interface MessageListener {
      * Result ignored when used webhook endpoint, that not expect any result.
      *
      * @param message webhook message
-     * @return message handling result to return in webhook or empty optional if result not expected. Following
-     * primitive types supported to return: String, Boolean, Integer and Double. For {@link Optional#empty()} plain
-     * string '{@code null}' will be returned. Also it's possible to return POJOs.
+     * @return message handling result string to return in webhook or null if result not expected.
      */
-    Optional<Object> onMessage(Message message);
+    @Nullable
+    String onMessage(Message message);
 
 }
