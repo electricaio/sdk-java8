@@ -16,10 +16,14 @@ import java.util.concurrent.TimeoutException;
 @ThreadSafe
 public class HackerRankV3Tests implements AutoCloseable {
 
+    public static final String ERN = "ern://hackerrank-v3:tests:1";
+    public static final long DEFAULT_TIMEOUT = TimeUnit.SECONDS.toMillis(60);
+
+
     private final Connection connection;
 
     public HackerRankV3Tests(Connection connection) {
-        this(connection, HackerRankV3TestsManager.DEFAULT_TIMEOUT);
+        this(connection, DEFAULT_TIMEOUT);
     }
 
     public HackerRankV3Tests(Connection connection, long timeout) {
