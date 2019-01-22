@@ -34,11 +34,10 @@ public class HackerRankV3Tests implements AutoCloseable {
         return connection;
     }
 
-
     /**
      * Asynchronously fetch all tests for a connection from the HackerRank API.
      * <p>
-     * @param callback
+     * @param callback Handling async call and on success <code>HackerRankV3TestsIndexResponse</code> is returned
      * @throws IOException
      */
     public void getOne(Callback<HackerRankV3TestsIndexResponse> callback) throws IOException {
@@ -53,8 +52,8 @@ public class HackerRankV3Tests implements AutoCloseable {
 
     /**
      * Synchronously fetch all tests for a connection from the HackerRank API.
-     * @param timeout
-     * @param unit
+     * @param timeout The amount of time to wait on HackerRank to return the result
+     * @param unit The unit of time to wait on HackerRank to return the result
      * @return
      * @throws IOException
      * @throws TimeoutException
@@ -75,8 +74,8 @@ public class HackerRankV3Tests implements AutoCloseable {
     /**
      * Asynchronously fetch an individual test from the HackerRank API.
      * <p>
-     * @param id
-     * @param callback
+     * @param id The test id
+     * @param callback Handling async call and on success <code>HackerRankV3TestsIndexResponse</code> is returned
      * @throws IOException
      */
     public void getTest(int id, Callback<HackerRankV3TestsShowResponse> callback) throws IOException {
@@ -92,9 +91,9 @@ public class HackerRankV3Tests implements AutoCloseable {
     /**
      * Synchronously fetch an individual test from the HackerRank API.
      * <p>
-     * @param id
-     * @param timeout
-     * @param unit
+     * @param id The test ID
+     * @param timeout The amount of time to wait on HackerRank to return the result
+     * @param unit The unit of time to wait on HackerRank to return the result
      * @return
      * @throws IOException
      * @throws TimeoutException
