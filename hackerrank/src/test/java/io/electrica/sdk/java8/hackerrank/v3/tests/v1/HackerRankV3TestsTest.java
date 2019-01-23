@@ -104,7 +104,7 @@ class HackerRankV3TestsTest {
         mockInvokeCall(response);
 
         BlockingQueue<Object> queue = new ArrayBlockingQueue<>(1);
-        tests.getTest(123, new Callback<HackerRankV3TestsShowResponse>() {
+        tests.getOne(123, new Callback<HackerRankV3TestsShowResponse>() {
             @Override
             public void onResponse(HackerRankV3TestsShowResponse result) {
                 queue.add(result);
@@ -127,7 +127,7 @@ class HackerRankV3TestsTest {
         HackerRankV3TestsShowResponse response = new HackerRankV3TestsShowResponse();
         response.setId(id);
         mockInvokeCall(response);
-        HackerRankV3TestsShowResponse result = tests.getTest(123, TIMEOUT, TimeUnit.SECONDS);
+        HackerRankV3TestsShowResponse result = tests.getOne(123, TIMEOUT, TimeUnit.SECONDS);
         assertEquals(result.getId(), id);
     }
 
@@ -139,7 +139,7 @@ class HackerRankV3TestsTest {
         mockInvokeCall(response);
 
         BlockingQueue<Object> queue = new ArrayBlockingQueue<>(1);
-        tests.getOne(new Callback<HackerRankV3TestsIndexResponse>() {
+        tests.getAll(new Callback<HackerRankV3TestsIndexResponse>() {
             @Override
             public void onResponse(HackerRankV3TestsIndexResponse result) {
                 queue.add(result);
@@ -161,7 +161,7 @@ class HackerRankV3TestsTest {
         String id = "hackerrank index id";
         HackerRankV3TestsIndexResponse response = createIndexResponse(id);
         mockInvokeCall(response);
-        HackerRankV3TestsIndexResponse result = tests.getOne(TIMEOUT, TimeUnit.SECONDS);
+        HackerRankV3TestsIndexResponse result = tests.getAll(TIMEOUT, TimeUnit.SECONDS);
         assertEquals(result.getData().get(0).getId(), id);
     }
 

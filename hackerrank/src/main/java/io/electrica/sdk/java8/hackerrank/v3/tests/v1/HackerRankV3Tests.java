@@ -17,16 +17,10 @@ import java.util.concurrent.TimeoutException;
 public class HackerRankV3Tests implements AutoCloseable {
 
     public static final String ERN = "ern://hackerrank-v3:tests:1";
-    public static final long DEFAULT_TIMEOUT = TimeUnit.SECONDS.toMillis(60);
-
 
     private final Connection connection;
 
     public HackerRankV3Tests(Connection connection) {
-        this(connection, DEFAULT_TIMEOUT);
-    }
-
-    public HackerRankV3Tests(Connection connection, long timeout) {
         this.connection = connection;
     }
 
@@ -40,7 +34,7 @@ public class HackerRankV3Tests implements AutoCloseable {
      * @param callback Handling async call and on success <code>HackerRankV3TestsIndexResponse</code> is returned
      * @throws IOException
      */
-    public void getOne(Callback<HackerRankV3TestsIndexResponse> callback) throws IOException {
+    public void getAll(Callback<HackerRankV3TestsIndexResponse> callback) throws IOException {
         connection.submit(
                 HackerRankV3TestsIndexResponse.class,
                 HackerRankV3TestsAction.TESTSINDEX,
@@ -59,7 +53,7 @@ public class HackerRankV3Tests implements AutoCloseable {
      * @throws TimeoutException
      * @throws IntegrationException
      */
-    public HackerRankV3TestsIndexResponse getOne(long timeout, TimeUnit unit) throws IOException, TimeoutException,
+    public HackerRankV3TestsIndexResponse getAll(long timeout, TimeUnit unit) throws IOException, TimeoutException,
             IntegrationException {
         return connection.invoke(
                 HackerRankV3TestsIndexResponse.class,
@@ -78,7 +72,7 @@ public class HackerRankV3Tests implements AutoCloseable {
      * @param callback Handling async call and on success <code>HackerRankV3TestsIndexResponse</code> is returned
      * @throws IOException
      */
-    public void getTest(int id, Callback<HackerRankV3TestsShowResponse> callback) throws IOException {
+    public void getOne(int id, Callback<HackerRankV3TestsShowResponse> callback) throws IOException {
         connection.submit(
                 HackerRankV3TestsShowResponse.class,
                 HackerRankV3TestsAction.TESTSSHOW,
@@ -99,7 +93,7 @@ public class HackerRankV3Tests implements AutoCloseable {
      * @throws TimeoutException
      * @throws IntegrationException
      */
-    public HackerRankV3TestsShowResponse getTest(int id, long timeout, TimeUnit unit) throws IOException,
+    public HackerRankV3TestsShowResponse getOne(int id, long timeout, TimeUnit unit) throws IOException,
             TimeoutException, IntegrationException {
         return connection.invoke(
                 HackerRankV3TestsShowResponse.class,
