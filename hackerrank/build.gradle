@@ -1,0 +1,30 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+version = "$hackerrank"
+
+def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.yml', null)
+
+task downloadSwaggerFiles {
+    doLast {
+        Files.copy(
+                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/tests.v1.yml').openStream(),
+                hackerrankWorkV1SwaggerFilePath,
+                StandardCopyOption.REPLACE_EXISTING
+        )
+    }
+}
+generateSwaggerCode.dependsOn downloadSwaggerFiles
+
+swaggerSources {
+    channelV1 {
+        code {
+            inputFile = hackerrankWorkV1SwaggerFilePath.toFile()
+            language = 'java'
+            configFile = file('./swagger/hackerrank-v3.tests.json')
+            outputDir = file("$buildDir/swagger-code")
+            components = ['models']
+            wipeOutputDir = false
+        }
+    }
+}

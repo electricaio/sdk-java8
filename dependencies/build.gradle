@@ -2,7 +2,8 @@ def versions = [
         'api': "$api",
         'core': "$core",
         'slack': "$slack",
-        'echo': "$echo"
+        'echo': "$echo",
+        'hackerrank': "$hackerrank"
 ]
 
 publishing {
