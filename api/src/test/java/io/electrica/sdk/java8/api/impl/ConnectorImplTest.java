@@ -99,7 +99,7 @@ class ConnectorImplTest {
 
         UUID uuid;
         try (Connector connector = new ConnectorImpl(electrica, ern)) {
-            uuid = connector.addMessageListener(Predicate.isEqual(null), message -> Optional.empty());
+            uuid = connector.addMessageListener(Predicate.isEqual(null), message -> null);
             connector.removeMessageListener(uuid);
         }
 

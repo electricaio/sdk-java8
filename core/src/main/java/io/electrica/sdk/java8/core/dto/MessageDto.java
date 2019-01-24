@@ -44,6 +44,16 @@ public class MessageDto {
 
     private Boolean expectedResult;
 
-    private JsonElement payload;
+    /**
+     * MediaType according to 'Accept' header. Null if expected result is false.
+     */
+    @Nullable
+    private String expectedContentType;
 
+    private String payload;
+
+    /**
+     * MediaType according to 'Content-Type' header.
+     */
+    private String contentType;
 }

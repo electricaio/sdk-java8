@@ -10,13 +10,13 @@ public class TestUtils {
 
     private static final String ACCESS_KEY_ENV = "ELECTRICA_SDK_JAVA8_ACCESS_KEY";
     private static final String DEFAULT_ACCESS_KEY = "" +
-            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYyIsInUiLCJjaCIsInciLCJpIiwid3MiXSwidXNlcl9uYW1lIjoi" +
-            "QGlkOjMiLCJzY29wZSI6WyJyIiwic2RrIl0sImV4cCI6MzY5NDkzMTk1OSwiaWF0IjoxNTQ3NDQ4MzEyLCJhdXRob3JpdGllcyI6W" +
-            "yJrZXk6MiIsIm9yZzoxIl0sImp0aSI6ImYyOTVmYjQzLWJhNWEtNDVjZS05ZWYwLTgzZjRmOTg5ZWFhMyIsImNsaWVudF9pZCI6Im" +
-            "FjY2Vzc0tleSJ9.M2skv6qfklWqk9WSkmRGL-tilm4IYkVNIy71C1w7_bdSvcfAx26bAF4gipvklenv7YbGXSIhc4UFN3bMh6lm8P" +
-            "34ezcKxWBuDUR89ET3lQKo9fJjLQdJGbrub7ojAascaHU4GKum43OOqMG8xKdJHyIczf8RbVP7YbzJOLFwZAUMHNyIYBw-yC4uRNi" +
-            "e3FDh7LygFODu3E2CFr9uEWpktCmBqlfYiUFxbtKywEtLaQThQo4eVkf7s4hOVlngh3rNNpWf1_ay2uODfCd5x-qv0NLGNVL2QsCe" +
-            "8pwW1X8KmxEsUO2tHMEAVXhVBE3UiTp7y6lAJ0eX1SPu6sBUtrrBNQ";
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsiYyIsInUiLCJjaCIsInciLCJpIiwid3MiXSwidXNlcl9uYW1lIjo" +
+            "iQGlkOjMiLCJzY29wZSI6WyJyIiwic2RrIl0sImV4cCI6MzY5NTc0Nzc0OCwiaWF0IjoxNTQ4MjY0MTAxLCJhdXRob3JpdGllcyI" +
+            "6WyJrZXk6MSIsIm9yZzoxIl0sImp0aSI6ImRiMTUzNTEyLTM1NTMtNGUzMC05NTM5LTU3MGFhNjNkMWU1NiIsImNsaWVudF9pZCI" +
+            "6ImFjY2Vzc0tleSJ9.KmZQDqSe8RQ9iFyQtC9LqPeFv8fy8N5VeN1-Pz7VL0Dcl1kyN5GwdSYxIDQWGfS2go08cbGofd3K4Y2Y_A" +
+            "Pn859WM4alYaaRCPtgrM9rJ7b6Y0YfgVEpNUrer7hlXUhmoy1DjgsFMwnImYuF0fH8RoR6YrJyts49BNcJbaJnWs-lsU19ogMfGa" +
+            "r-hAaoX_0dFbRK66SCGvq94NiL54ohHlLpdgmqlIKSaDRUKkYWRImTfhjoI3mlPL3gQ2U7eiwU8RrV8Zl3vUqcaGArEaDX1Etycj" +
+            "qfsojKscUys7Fm8M3NdJdwe7KJ2GnByr3eF_inmehi41YVGNjKfSkgBBHsbg";
 
     private TestUtils() {
     }

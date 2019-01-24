@@ -97,7 +97,17 @@ public class MessageImpl implements Message {
     }
 
     @Override
-    public <T> T getPayload(Class<T> type) {
-        return gson.fromJson(dto.getPayload(), type);
+    public String getContentType() {
+        return dto.getContentType();
+    }
+
+    @Override
+    public String getExpectedContentType() {
+        return dto.getExpectedContentType();
+    }
+
+    @Override
+    public String getPayload() {
+        return dto.getPayload();
     }
 }

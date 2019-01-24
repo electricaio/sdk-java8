@@ -22,7 +22,7 @@ public interface HttpModule extends AutoCloseable {
 
     List<ConnectionInfo> getConnections(UUID instanceId, @Nullable String name, String ern) throws IOException;
 
-    void sendMessageResult(UUID instanceId, Message message, @Nullable Object result) throws IOException;
+    void sendMessageResult(UUID instanceId, Message message, @Nullable String result) throws IOException;
 
     UUID addMessageListener(UUID instanceId, Predicate<Message> filter, Consumer<Message> listener);
 
