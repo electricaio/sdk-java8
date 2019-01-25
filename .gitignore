@@ -15,7 +15,7 @@
 *.iml
 *.ipr
 */out/
-*/build/
+build/
 *.class
 
 ### NetBeans ###

@@ -3,25 +3,47 @@ import java.nio.file.StandardCopyOption
 
 version = "$hackerrank"
 
-def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.yml', null)
+def hackerRankTestsV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.yml', null)
+def hackerRankCandidatesV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.candidates.yml', null)
 
-task downloadSwaggerFiles {
+task downloadHackerRankTestsSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/tests.v1.yml').openStream(),
-                hackerrankWorkV1SwaggerFilePath,
+                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.tests.yml').openStream(),
+                hackerRankTestsV1SwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )
     }
 }
-generateSwaggerCode.dependsOn downloadSwaggerFiles
+
+task downloadHackerRankCandidatesSwaggerFiles {
+    doLast {
+        Files.copy(
+                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.candidates.yml').openStream(),
+                hackerRankCandidatesV1SwaggerFilePath,
+                StandardCopyOption.REPLACE_EXISTING
+        )
+    }
+}
+generateSwaggerCode.dependsOn downloadHackerRankTestsSwaggerFiles
+generateSwaggerCode.dependsOn downloadHackerRankCandidatesSwaggerFiles
 
 swaggerSources {
-    channelV1 {
+    TestsV1 {
         code {
-            inputFile = hackerrankWorkV1SwaggerFilePath.toFile()
+            inputFile = hackerRankTestsV1SwaggerFilePath.toFile()
             language = 'java'
             configFile = file('./swagger/hackerrank-v3.tests.json')
+            outputDir = file("$buildDir/swagger-code")
+            components = ['models']
+            wipeOutputDir = false
+        }
+    }
+    CandidatesV1 {
+        code {
+            inputFile = hackerRankCandidatesV1SwaggerFilePath.toFile()
+            language = 'java'
+            configFile = file('./swagger/hackerrank-v3.candidates.json')
             outputDir = file("$buildDir/swagger-code")
             components = ['models']
             wipeOutputDir = false

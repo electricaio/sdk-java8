@@ -41,7 +41,7 @@ class HackerRankV3TestsTest {
 
 
     @BeforeAll
-    static void setUp() throws IOException {
+    static void setUp() {
         httpModule = mock(HttpModule.class);
         electrica = Electrica.instance(httpModule, ACCESS_KEY);
     }
@@ -83,10 +83,6 @@ class HackerRankV3TestsTest {
         Connection connection = new ConnectionImpl(connector, info);
 
         return connection;
-    }
-
-    private HackerRankV3TestsShowResponse showResponse() {
-        return new HackerRankV3TestsShowResponse();
     }
 
     @AfterAll
