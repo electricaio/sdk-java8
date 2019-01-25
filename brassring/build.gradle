@@ -1,15 +1,15 @@
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
-version = "$hackerrank"
+version = "$brassring"
 
-def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.yml', null)
+def brassRingApplicationSwaggerFilePath = Files.createTempFile('brassring.application.yml', null)
 
 task downloadSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.tests.yml').openStream(),
-                hackerrankWorkV1SwaggerFilePath,
+                new URL('http://connector.artifact.dev.electrica.io/brassring/swagger/brassring.application.yml').openStream(),
+                brassRingApplicationSwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )
     }
@@ -19,9 +19,9 @@ generateSwaggerCode.dependsOn downloadSwaggerFiles
 swaggerSources {
     channelV1 {
         code {
-            inputFile = hackerrankWorkV1SwaggerFilePath.toFile()
+            inputFile = brassRingApplicationSwaggerFilePath.toFile()
             language = 'java'
-            configFile = file('./swagger/hackerrank-v3.tests.json')
+            configFile = file('./swagger/brassring.application.json')
             outputDir = file("$buildDir/swagger-code")
             components = ['models']
             wipeOutputDir = false

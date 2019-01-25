@@ -1,5 +1,6 @@
 package io.electrica.sdk.java8.api.http;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -11,6 +12,7 @@ public interface ConnectionInfo {
 
     String getName();
 
+    @Nullable
     Map<String, String> getProperties();
 
 }
