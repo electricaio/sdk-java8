@@ -12,10 +12,7 @@ import io.electrica.sdk.java8.hackerrank.v3.candidates.v1.model.HackerRankV3Cand
 import io.electrica.sdk.java8.hackerrank.v3.candidates.v1.model.HackerRankV3TestCandidateInvite;
 import io.electrica.sdk.java8.hackerrank.v3.candidates.v1.model.HackerRankV3TestCandidatePayload;
 import io.electrica.sdk.java8.hackerrank.v3.candidates.v1.model.HackerRankV3TestInvitationResponse;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;
 
 import java.io.IOException;
@@ -45,6 +42,12 @@ class HackerRankV3CandidatesTest {
         mockConnection();
     }
 
+
+    @AfterAll
+    static void tearDown() throws Exception {
+        electrica.close();
+    }
+
     private static void mockConnection() throws IOException {
         doAnswer(invocation -> {
             ConnectionInfo connectionInfo = mock(ConnectionInfo.class);
@@ -68,12 +71,13 @@ class HackerRankV3CandidatesTest {
     }
 
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDownHackerRank() throws Exception {
         candidates.close();
         assertTrue(candidates.getConnection().isClosed());
     }
 
-    private <R> void assertInvitationActionAndPayload(R response, HackerRankV3TestCandidateInvite body) throws IOException {
+    private <R> void assertInvitationActionAndPayload(R response, HackerRankV3TestCandidateInvite body)
+            throws IOException {
         doAnswer(invocation -> {
             Request request = invocation.getArgument(1);
             HackerRankV3TestCandidatePayload payload = (HackerRankV3TestCandidatePayload) request.getPayload();
@@ -124,6 +128,7 @@ class HackerRankV3CandidatesTest {
                 TimeUnit.MILLISECONDS);
         assertEquals(id, result.getId());
     }
+
 
     @Test
     void inviteCandidateAsynchronouslyWithActionAndPayload() throws Exception {

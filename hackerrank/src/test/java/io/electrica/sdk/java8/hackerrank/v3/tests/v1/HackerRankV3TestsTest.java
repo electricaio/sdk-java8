@@ -47,6 +47,13 @@ class HackerRankV3TestsTest {
     }
 
 
+    @AfterAll
+    static void tearDown() throws Exception {
+        electrica.close();
+    }
+
+
+
     @BeforeEach
     void setUpHackerRank() throws IOException {
         tests = new HackerRankV3Tests(createConnection());
@@ -86,7 +93,7 @@ class HackerRankV3TestsTest {
     }
 
     @AfterAll
-    static void tearDown() throws Exception {
+    static void tearDownHackerRank() throws Exception {
         tests.close();
         assertTrue(tests.getConnection().isClosed());
     }

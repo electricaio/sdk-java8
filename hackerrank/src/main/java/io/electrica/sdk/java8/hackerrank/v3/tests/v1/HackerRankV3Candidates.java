@@ -35,7 +35,8 @@ public class HackerRankV3Candidates implements AutoCloseable {
      * @param callback Handling async call and on success <code>HackerRankV3TestsIndexResponse</code> is returned
      * @throws IOException
      */
-    public void invite(int testID, HackerRankV3TestCandidateInvite invitation, Callback<HackerRankV3TestInvitationResponse> callback) throws IOException {
+    public void invite(int testID, HackerRankV3TestCandidateInvite invitation,
+                       Callback<HackerRankV3TestInvitationResponse> callback) throws IOException {
         connection.submit
                 (
                         HackerRankV3TestInvitationResponse.class,
@@ -56,7 +57,8 @@ public class HackerRankV3Candidates implements AutoCloseable {
      * @throws TimeoutException
      * @throws IntegrationException
      */
-    public HackerRankV3TestInvitationResponse invite(int testID, HackerRankV3TestCandidateInvite invitation, long timeout, TimeUnit unit) throws IOException, TimeoutException,
+    public HackerRankV3TestInvitationResponse invite(int testID, HackerRankV3TestCandidateInvite invitation,
+                                                     long timeout, TimeUnit unit) throws IOException, TimeoutException,
             IntegrationException {
         return connection.invoke(
                 HackerRankV3TestInvitationResponse.class,
