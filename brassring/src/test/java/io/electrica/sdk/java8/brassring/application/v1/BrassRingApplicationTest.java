@@ -18,14 +18,17 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class BrassRingApplicationTest {
 
+    private static final BrassRingApplicationPayload PAYLOAD = new BrassRingApplicationPayload()
+            .formTypeId(12345)
+            .addFieldsItem(new FormInput().id(1).name("FirstName").value("Doh"))
+            .addFieldsItem(new FormInput().id(2).name("LastName").value("Joe"));
     private static Electrica electrica;
     private static BrassRingApplication brassRingApplication;
 
@@ -56,6 +59,9 @@ class BrassRingApplicationTest {
                 );
 
         doAnswer(invocation -> {
+            Request r = invocation.getArgument(1);
+            assertEquals(PAYLOAD, r.getPayload());
+
             Callback<?> rh = invocation.getArgument(3);
             rh.onResponse(null);
             return null;
@@ -85,10 +91,7 @@ class BrassRingApplicationTest {
     @Test
     void testSyncUpdate() throws Exception {
         brassRingApplication.update(
-                new BrassRingApplicationPayload()
-                        .formTypeId(12345)
-                        .addFieldsItem(new FormInput().id(1).name("FirstName").value("Doh"))
-                        .addFieldsItem(new FormInput().id(2).name("LastName").value("Joe")),
+                PAYLOAD,
                 10,
                 TimeUnit.SECONDS
         );
@@ -98,10 +101,7 @@ class BrassRingApplicationTest {
     void testASyncUpdate() throws Exception {
         BlockingQueue<Object> queue = new ArrayBlockingQueue<>(1);
         brassRingApplication.update(
-                new BrassRingApplicationPayload()
-                        .formTypeId(12345)
-                        .addFieldsItem(new FormInput().id(1).name("FirstName").value("Doh"))
-                        .addFieldsItem(new FormInput().id(2).name("LastName").value("Joe")),
+                PAYLOAD,
                 new Callback<Void>() {
                     @Override
                     public void onResponse(Void result) {

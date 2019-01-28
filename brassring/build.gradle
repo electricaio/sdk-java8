@@ -17,7 +17,7 @@ task downloadSwaggerFiles {
 generateSwaggerCode.dependsOn downloadSwaggerFiles
 
 swaggerSources {
-    channelV1 {
+    ApplicationV1 {
         code {
             inputFile = brassRingApplicationSwaggerFilePath.toFile()
             language = 'java'
