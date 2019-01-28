@@ -1,0 +1,30 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+version = "$brassring"
+
+def brassRingApplicationSwaggerFilePath = Files.createTempFile('brassring.application.yml', null)
+
+task downloadSwaggerFiles {
+    doLast {
+        Files.copy(
+                new URL('http://connector.artifact.dev.electrica.io/brassring/swagger/brassring.application.yml').openStream(),
+                brassRingApplicationSwaggerFilePath,
+                StandardCopyOption.REPLACE_EXISTING
+        )
+    }
+}
+generateSwaggerCode.dependsOn downloadSwaggerFiles
+
+swaggerSources {
+    ApplicationV1 {
+        code {
+            inputFile = brassRingApplicationSwaggerFilePath.toFile()
+            language = 'java'
+            configFile = file('./swagger/brassring.application.json')
+            outputDir = file("$buildDir/swagger-code")
+            components = ['models']
+            wipeOutputDir = false
+        }
+    }
+}

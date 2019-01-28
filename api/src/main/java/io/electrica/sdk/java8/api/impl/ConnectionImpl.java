@@ -34,7 +34,7 @@ public class ConnectionImpl implements Connection {
     private final List<UUID> listeners = new ArrayList<>();
     private boolean closed = false;
 
-    public ConnectionImpl(Connector connector, ConnectionInfo connectionInfo) {
+    ConnectionImpl(Connector connector, ConnectionInfo connectionInfo) {
         this.electrica = connector.getElectrica();
         this.connector = connector;
         this.connectionInfo = connectionInfo;
