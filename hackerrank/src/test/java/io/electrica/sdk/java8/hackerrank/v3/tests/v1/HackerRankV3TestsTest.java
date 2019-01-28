@@ -8,7 +8,6 @@ import io.electrica.sdk.java8.api.exception.IntegrationException;
 import io.electrica.sdk.java8.api.http.ConnectionInfo;
 import io.electrica.sdk.java8.api.http.HttpModule;
 import io.electrica.sdk.java8.api.http.Request;
-import io.electrica.sdk.java8.api.impl.ConnectionImpl;
 import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsIndex;
 import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsIndexResponse;
 import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsShowResponse;
@@ -17,8 +16,6 @@ import org.mockito.ArgumentMatchers;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -31,28 +28,37 @@ import static org.mockito.Mockito.*;
 class HackerRankV3TestsTest {
 
     private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
-
     private static Electrica electrica;
-
-    private static final String CONNECTION_NAME = "connection_name";
-    private static final String ACCESS_KEY = "key";
-    private static HttpModule httpModule;
+    private static HttpModule httpModule = mock(HttpModule.class);
     private static HackerRankV3Tests tests;
-
 
     @BeforeAll
     static void setUp() throws IOException {
-        httpModule = mock(HttpModule.class);
-        electrica = Electrica.instance(httpModule, ACCESS_KEY);
+        electrica = Electrica.instance(httpModule, "key");
+        mockConnection();
     }
 
-
-    @BeforeEach
-    void setUpHackerRank() throws IOException {
-        tests = new HackerRankV3Tests(createConnection());
+    @AfterAll
+    static void tearDown() throws Exception {
+        electrica.close();
     }
 
-    private <R> void mockInvokeCall(R response) throws IOException {
+    private static void mockConnection() throws IOException {
+        doAnswer(invocation -> {
+            ConnectionInfo connectionInfo = mock(ConnectionInfo.class);
+            when(connectionInfo.getId()).thenReturn(1L);
+            when(connectionInfo.getName()).thenReturn(Connection.DEFAULT_NAME);
+            return Collections.singletonList(connectionInfo);
+        })
+                .when(httpModule)
+                .getConnections(
+                        eq(electrica.getInstanceId()),
+                        eq(Connection.DEFAULT_NAME),
+                        eq(HackerRankV3Tests.ERN)
+                );
+    }
+
+    private static <R> void mockInvokeCall(R response) throws IOException {
 
         doAnswer(invocation -> {
             Callback<R> rh = invocation.getArgument(3);
@@ -68,29 +74,15 @@ class HackerRankV3TestsTest {
 
     }
 
-
-    private Connection createConnection() throws IOException {
-        Long connectionId = 100L;
-        Map<String, String> connectionProperties = new HashMap<>();
-
-        ConnectionInfo info = mock(ConnectionInfo.class);
-        when(info.getId()).thenReturn(connectionId);
-        when(info.getName()).thenReturn(CONNECTION_NAME);
-        when(info.getProperties()).thenReturn(connectionProperties);
-
+    @BeforeEach
+    void setUpHackerRank() {
         Connector connector = electrica.connector(HackerRankV3Tests.ERN);
-
-        Connection connection = new ConnectionImpl(connector, info);
-
-        return connection;
+        Connection connection = connector.defaultConnection();
+        tests = new HackerRankV3Tests(connection);
     }
 
-    private HackerRankV3TestsShowResponse showResponse() {
-        return new HackerRankV3TestsShowResponse();
-    }
-
-    @AfterAll
-    static void tearDown() throws Exception {
+    @AfterEach
+    void tearDownHackerRank() throws Exception {
         tests.close();
         assertTrue(tests.getConnection().isClosed());
     }

@@ -8,7 +8,7 @@ def hackerrankWorkV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.tests.
 task downloadSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/tests.v1.yml').openStream(),
+                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.tests.yml').openStream(),
                 hackerrankWorkV1SwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )
