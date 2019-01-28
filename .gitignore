@@ -15,7 +15,6 @@
 *.iml
 *.ipr
 */out/
-*/build/
 *.class
 
 ### NetBeans ###
@@ -24,3 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Swagger code gen models and java class files ###
+build/
