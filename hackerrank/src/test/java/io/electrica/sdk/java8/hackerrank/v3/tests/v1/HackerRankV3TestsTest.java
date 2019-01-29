@@ -8,9 +8,7 @@ import io.electrica.sdk.java8.api.exception.IntegrationException;
 import io.electrica.sdk.java8.api.http.ConnectionInfo;
 import io.electrica.sdk.java8.api.http.HttpModule;
 import io.electrica.sdk.java8.api.http.Request;
-import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsIndex;
-import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsIndexResponse;
-import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.HackerRankV3TestsShowResponse;
+import io.electrica.sdk.java8.hackerrank.v3.tests.v1.model.*;
 import org.junit.jupiter.api.*;
 import org.mockito.ArgumentMatchers;
 
@@ -28,6 +26,9 @@ import static org.mockito.Mockito.*;
 class HackerRankV3TestsTest {
 
     private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
+    public static final int TEST_ID = 123;
+    public static final int LIMIT = 10;
+    public static final int OFFSET = 0;
     private static Electrica electrica;
     private static HttpModule httpModule = mock(HttpModule.class);
     private static HackerRankV3Tests tests;
@@ -58,10 +59,35 @@ class HackerRankV3TestsTest {
                 );
     }
 
-    private static <R> void mockInvokeCall(R response) throws IOException {
+    private static <R> void mockTestIndexInvokeCall(R response) throws IOException {
 
         doAnswer(invocation -> {
             Callback<R> rh = invocation.getArgument(3);
+            Request request = invocation.getArgument(1);
+            LimitOffset payload = (LimitOffset) request.getPayload();
+            assertEquals(LIMIT, payload.getLimit().intValue());
+            assertEquals(OFFSET, payload.getOffset().intValue());
+            assertEquals(HackerRankV3TestsAction.TESTSINDEX.getValue(), request.getAction());
+            rh.onResponse(response);
+            return null;
+        })
+                .when(httpModule)
+                .submitJob(
+                        eq(electrica.getInstanceId()),
+                        any(Request.class),
+                        any(),
+                        ArgumentMatchers.<Callback<R>>any());
+
+    }
+
+    private static <R> void mockTestShowInvokeCall(R response) throws IOException {
+
+        doAnswer(invocation -> {
+            Callback<R> rh = invocation.getArgument(3);
+            Request request = invocation.getArgument(1);
+            HackerRankV3TestsShowPayload payload = (HackerRankV3TestsShowPayload) request.getPayload();
+            assertEquals(TEST_ID, payload.getId().intValue());
+            assertEquals(HackerRankV3TestsAction.TESTSSHOW.getValue(), request.getAction());
             rh.onResponse(response);
             return null;
         })
@@ -93,10 +119,10 @@ class HackerRankV3TestsTest {
         String id = "hacker rank show response";
         response.setId(id);
 
-        mockInvokeCall(response);
+        mockTestShowInvokeCall(response);
 
         BlockingQueue<Object> queue = new ArrayBlockingQueue<>(1);
-        tests.getOne(123, new Callback<HackerRankV3TestsShowResponse>() {
+        tests.getOne(TEST_ID, new Callback<HackerRankV3TestsShowResponse>() {
             @Override
             public void onResponse(HackerRankV3TestsShowResponse result) {
                 queue.add(result);
@@ -118,7 +144,7 @@ class HackerRankV3TestsTest {
         String id = "hacker rank show response";
         HackerRankV3TestsShowResponse response = new HackerRankV3TestsShowResponse();
         response.setId(id);
-        mockInvokeCall(response);
+        mockTestShowInvokeCall(response);
         HackerRankV3TestsShowResponse result = tests.getOne(123, TIMEOUT, TimeUnit.SECONDS);
         assertEquals(result.getId(), id);
     }
@@ -128,7 +154,7 @@ class HackerRankV3TestsTest {
         String id = "hackerrank index id";
         HackerRankV3TestsIndexResponse response = createIndexResponse(id);
 
-        mockInvokeCall(response);
+        mockTestIndexInvokeCall(response);
 
         BlockingQueue<Object> queue = new ArrayBlockingQueue<>(1);
         tests.getAll(new Callback<HackerRankV3TestsIndexResponse>() {
@@ -141,7 +167,7 @@ class HackerRankV3TestsTest {
             public void onFailure(IntegrationException exception) {
                 queue.add(exception);
             }
-        });
+        }, LIMIT, OFFSET);
 
         HackerRankV3TestsIndexResponse result = (HackerRankV3TestsIndexResponse) queue.poll(TIMEOUT,
                 TimeUnit.MILLISECONDS);
@@ -152,8 +178,8 @@ class HackerRankV3TestsTest {
     void getAllTestsSynchronously() throws Exception {
         String id = "hackerrank index id";
         HackerRankV3TestsIndexResponse response = createIndexResponse(id);
-        mockInvokeCall(response);
-        HackerRankV3TestsIndexResponse result = tests.getAll(TIMEOUT, TimeUnit.SECONDS);
+        mockTestIndexInvokeCall(response);
+        HackerRankV3TestsIndexResponse result = tests.getAll(TIMEOUT, TimeUnit.SECONDS, LIMIT, OFFSET);
         assertEquals(result.getData().get(0).getId(), id);
     }
 
