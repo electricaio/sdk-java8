@@ -59,7 +59,7 @@ class HackerRankV3CandidatesTest {
                 .getConnections(
                         eq(electrica.getInstanceId()),
                         eq(Connection.DEFAULT_NAME),
-                        eq(HackerRankV3Tests.ERN)
+                        eq(HackerRankV3Candidates.ERN)
                 );
     }
 
