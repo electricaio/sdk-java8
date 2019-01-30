@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 @ThreadSafe
 public class HackerRankV3Candidates implements AutoCloseable {
 
-    public static final String ERN = "ern://hackerrank-v3:tests:1";
+    public static final String ERN = "ern://hackerrank-v3:candidates:1";
 
     private final Connection connection;
 
