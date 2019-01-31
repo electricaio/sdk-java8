@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 
 import javax.annotation.Nullable;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -22,6 +23,8 @@ public class WebSocketHandler extends WebSocketListener implements AutoCloseable
 
     public static final String WEBSOCKETS_PATH = "/v1/websockets";
     public static final String INSTANCE_ID_HEADER = "x-electrica-sdk-instance-id";
+    public static final String INSTANCE_NAME_HEADER = "x-electrica-sdk-instance-name";
+    public static final String INSTANCE_START_CLIENT_TIME_HEADER = "x-electrica-sdk-instance-ws-session-start-time";
     public static final String RECONNECT_THREAD_NAME = "electrica-sdk-ws-reconnect";
 
     protected static final int INSTANCE_CLOSE_CODE = 1000;
@@ -53,6 +56,7 @@ public class WebSocketHandler extends WebSocketListener implements AutoCloseable
             long terminationTimeoutMillis,
             String apiUrl,
             UUID instanceId,
+            String instanceName,
             String authorizationHeader
     ) {
         this.gson = gson;
@@ -64,6 +68,7 @@ public class WebSocketHandler extends WebSocketListener implements AutoCloseable
                 .url(buildEndpointUrl(apiUrl))
                 .header(SingleInstanceHttpModule.AUTHORIZATION, authorizationHeader)
                 .header(INSTANCE_ID_HEADER, instanceId.toString())
+                .header(INSTANCE_NAME_HEADER, instanceName)
                 .build();
         tryReconnect();
     }
@@ -155,7 +160,10 @@ public class WebSocketHandler extends WebSocketListener implements AutoCloseable
             } else {
                 log.info(LOG_PREFIX + " connecting..");
             }
-            webSocket.set(httpClient.newWebSocket(request, WebSocketHandler.this));
+            Request requestWithDate = request.newBuilder()
+                    .header(INSTANCE_START_CLIENT_TIME_HEADER, ZonedDateTime.now().toString())
+                    .build();
+            webSocket.set(httpClient.newWebSocket(requestWithDate, WebSocketHandler.this));
         }, delay, TimeUnit.MILLISECONDS);
     }
 

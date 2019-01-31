@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 public interface HttpModule extends AutoCloseable {
 
-    void initialize(UUID instanceId, String accessKey);
+    void initialize(UUID instanceId, String instanceName, String accessKey);
 
     <R> void submitJob(
             UUID instanceId,
