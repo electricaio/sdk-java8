@@ -26,15 +26,21 @@ public class ElectricaImpl implements Electrica {
     private final HttpModule httpModule;
 
     private final UUID instanceId;
+    private final String instanceName;
     private final String accessKey;
 
     private final Set<ConnectorImpl> connectors = new HashSet<>();
     private boolean closed = false;
 
     public ElectricaImpl(HttpModule httpModule, String accessKey) {
+        this(httpModule, null, accessKey);
+    }
+
+    public ElectricaImpl(HttpModule httpModule, String instanceName, String accessKey) {
         this.httpModule = requireNonNull(httpModule, "httpModule");
         this.accessKey = requireNonNull(accessKey, "accessKey");
         this.instanceId = UUID.randomUUID();
+        this.instanceName = instanceName == null ? instanceId.toString() : instanceName;
         initialize();
     }
 
@@ -45,7 +51,7 @@ public class ElectricaImpl implements Electrica {
     }
 
     protected void initialize() {
-        httpModule.initialize(instanceId, accessKey);
+        httpModule.initialize(instanceId, instanceName, accessKey);
     }
 
     @Override

@@ -33,6 +33,18 @@ public interface Electrica extends AutoCloseable {
     }
 
     /**
+     * Creates Electrica instance.
+     * From here, we can create connectors to different sources such as:
+     * <p>
+     * Greenhouse, SalesForce, MySQL etc
+     * by using {@link Electrica#connector(String)}
+     *
+     * @return - electrica instance
+     */
+    static Electrica instance(HttpModule httpModule, String instanceName, String accessKey) {
+        return new ElectricaImpl(httpModule, instanceName, accessKey);
+    }
+    /**
      * Given the ern,
      * it creates a connector object to desired source.
      * <p>

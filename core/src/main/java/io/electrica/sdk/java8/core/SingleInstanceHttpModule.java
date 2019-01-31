@@ -79,7 +79,7 @@ public class SingleInstanceHttpModule implements HttpModule {
 
     /**
      * Specify custom {@link Gson} instance, otherwise {@link #createDefaultGson()} will used.
-     * Make sense only until {@link #initialize(UUID, String)} invoked.
+     * Make sense only until {@link #initialize(UUID, String, String)} invoked.
      */
     public void setGson(Gson gson) {
         this.gson = gson;
@@ -98,7 +98,7 @@ public class SingleInstanceHttpModule implements HttpModule {
 
     /**
      * Specify custom {@link OkHttpClient} instance, otherwise {@link #createDefaultHttpClient()} will used.
-     * Make sense only until {@link #initialize(UUID, String)} invoked.
+     * Make sense only until {@link #initialize(UUID, String, String)} invoked.
      */
     public void setHttpClient(OkHttpClient httpClient) {
         this.httpClient = httpClient;
@@ -120,7 +120,7 @@ public class SingleInstanceHttpModule implements HttpModule {
 
     /**
      * Specify custom {@link RetryStrategy} instance, otherwise {@link #createDefaultRetryStrategy()} will used.
-     * Make sense only until {@link #initialize(UUID, String)} invoked.
+     * Make sense only until {@link #initialize(UUID, String, String)} invoked.
      */
     public void setWebSocketRetryStrategy(RetryStrategy webSocketRetryStrategy) {
         this.webSocketRetryStrategy = webSocketRetryStrategy;
@@ -138,7 +138,7 @@ public class SingleInstanceHttpModule implements HttpModule {
     /**
      * Specify custom {@link ExecutorService} instance for websocket events delivery, otherwise
      * {@link #createDefaultEventExecutor()} will used.
-     * Make sense only until {@link #initialize(UUID, String)} invoked.
+     * Make sense only until {@link #initialize(UUID, String, String)} invoked.
      */
     public void setEventExecutor(ExecutorService eventExecutor) {
         this.eventExecutor = eventExecutor;
@@ -247,7 +247,7 @@ public class SingleInstanceHttpModule implements HttpModule {
     }
 
     @Override
-    public void initialize(UUID instanceId, String accessKey) {
+    public void initialize(UUID instanceId, String instanceName, String accessKey) {
         checkClosed();
 
         // Init defaults
@@ -267,7 +267,7 @@ public class SingleInstanceHttpModule implements HttpModule {
         // Create services
         authorizationHeader = createAuthorizationHeader(accessKey);
         eventDispatcher = createEventDispatcher();
-        webSocketHandler = createWebSocketHandler(instanceId);
+        webSocketHandler = createWebSocketHandler(instanceId, instanceName);
     }
 
     protected String createAuthorizationHeader(String accessKey) {
@@ -278,7 +278,7 @@ public class SingleInstanceHttpModule implements HttpModule {
         return new InstanceEventDispatcher(gson, eventExecutor, eventDispatcherTerminationTimeout);
     }
 
-    protected WebSocketHandler createWebSocketHandler(UUID instanceId) {
+    protected WebSocketHandler createWebSocketHandler(UUID instanceId, String instanceName) {
         return new WebSocketHandler(
                 gson,
                 httpClient,
@@ -287,6 +287,7 @@ public class SingleInstanceHttpModule implements HttpModule {
                 webSocketTerminationTimeout,
                 apiUrl,
                 instanceId,
+                instanceName,
                 authorizationHeader
         );
     }
