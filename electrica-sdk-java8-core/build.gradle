@@ -1,11 +1,11 @@
 version = "$core"
 
 dependencies {
-    compile project(':api')
+    compile project(':electrica-sdk-java8-api')
 
     compile "com.squareup.okhttp3:okhttp:$okhttp"
     compile "com.google.code.gson:gson:$gson"
 
-    testCompile project(':echo')
+    testCompile project(':electrica-sdk-java8-echo')
     testCompile 'ch.qos.logback:logback-classic:1.0.13'
 }

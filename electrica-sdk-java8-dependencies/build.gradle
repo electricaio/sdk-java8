@@ -1,10 +1,10 @@
 def versions = [
-        'api': "$api",
-        'core': "$core",
-        'slack': "$slack",
-        'echo': "$echo",
-        'hackerrank': "$hackerrank",
-        'brassring': "$brassring"
+        'electrica-sdk-java8-api': "$api",
+        'electrica-sdk-java8-core': "$core",
+        'electrica-sdk-java8-slack': "$slack",
+        'electrica-sdk-java8-echo': "$echo",
+        'electrica-sdk-java8-hackerrank': "$hackerrank",
+        'electrica-sdk-java8-brassring': "$brassring"
 ]
 
 publishing {
@@ -40,12 +40,12 @@ publishing {
                 def properties = asNode().appendNode('properties')
                 project.rootProject.subprojects.each {
                     def moduleName = it.name
-                    if (moduleName != 'dependencies') {
+                    if (moduleName != 'electrica-sdk-java8-dependencies') {
                         def version = versions[moduleName]
                         if (version == null) {
                             throw new IllegalArgumentException("Unknown version for module: ${moduleName}")
                         }
-                        properties.appendNode("electrica-sdk-java8-${moduleName}.version", version)
+                        properties.appendNode("${moduleName}.version", version)
                     }
                 }
 
@@ -54,11 +54,11 @@ publishing {
 
                 project.rootProject.subprojects.each {
                     def moduleName = it.name
-                    if (moduleName != 'dependencies') {
+                    if (moduleName != 'electrica-sdk-java8-dependencies') {
                         Node dependency = dependencies.appendNode('dependency')
                         dependency.appendNode('groupId').value = it.group
                         dependency.appendNode('artifactId').value = moduleName
-                        dependency.appendNode('version').value = "\${electrica-sdk-java8-${moduleName}.version}"
+                        dependency.appendNode('version').value = "\${${moduleName}.version}"
                     }
                 }
             }

@@ -20,18 +20,18 @@ allprojects {
     targetCompatibility = 1.8
 
     group = 'io.electrica.sdk.java8'
-    version = '0.0.1'
+    version = '0.0.1-SNAPSHOT'
 }
 
 subprojects {
     ext {
-        api = '0.0.1'
-        core = '0.0.1'
+        api = "$project.version"
+        core = "$project.version"
 
-        slack = '0.0.1'
-        echo = '0.0.1'
-        hackerrank = '0.0.1'
-        brassring = '0.0.1'
+        slack = "$project.version"
+        echo = "$project.version"
+        hackerrank = "$project.version"
+        brassring = "$project.version"
 
         findbugsJsr305 = '3.0.2'
         lombok = '1.18.4'
@@ -46,7 +46,7 @@ subprojects {
 
     def moduleName = it.name
     def moduleDescription = it.description == null ? moduleName : it.description
-    if (moduleName != 'dependencies') {
+    if (moduleName != 'electrica-sdk-java8-dependencies') {
 
         // Setup Lombok, test libraries and JUnit5 implementation for all modules
         dependencies {
@@ -66,16 +66,16 @@ subprojects {
         }
 
         // Setup api module dependency and Swagger code-generator for typed connector modules
-        if (moduleName != 'api' && moduleName != 'core') {
+        if (moduleName != 'electrica-sdk-java8-api' && moduleName != 'electrica-sdk-java8-core') {
             apply plugin: 'org.hidetake.swagger.generator'
 
             dependencies {
-                compile project(':api')
+                compile project(':electrica-sdk-java8-api')
 
                 compile "com.google.code.gson:gson:$gson"
                 compile "io.swagger:swagger-annotations:$swaggerAnnotations"
 
-                testCompile project(':core')
+                testCompile project(':electrica-sdk-java8-core')
                 
                 swaggerCodegen "io.swagger:swagger-codegen-cli:$swaggerCodegenCli"
             }

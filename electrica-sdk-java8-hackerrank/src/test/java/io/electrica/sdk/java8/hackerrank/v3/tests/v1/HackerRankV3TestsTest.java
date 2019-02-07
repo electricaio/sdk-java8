@@ -25,10 +25,10 @@ import static org.mockito.Mockito.*;
 
 class HackerRankV3TestsTest {
 
-    private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
     public static final int TEST_ID = 123;
     public static final int LIMIT = 10;
     public static final int OFFSET = 0;
+    private static final long TIMEOUT = TimeUnit.SECONDS.toMillis(30);
     private static Electrica electrica;
     private static HttpModule httpModule = mock(HttpModule.class);
     private static HackerRankV3Tests tests;
