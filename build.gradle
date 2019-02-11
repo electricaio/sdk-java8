@@ -25,6 +25,9 @@ allprojects {
 
 subprojects {
     ext {
+        // TODO tag must be defined from version name. possible values ['latest', 'latest-snapshot']
+        artifactsUrl = 'http://connector.artifact.electrica.io/latest-snapshot'
+        
         api = "$project.version"
         core = "$project.version"
 
