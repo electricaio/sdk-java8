@@ -8,7 +8,7 @@ def testV1SwaggerFilePath = Files.createTempFile('echo.test.v1.yml', null)
 task downloadSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/echo/swagger/test.v1.yml').openStream(),
+                new URL("${artifactsUrl}/electrica-connector-echo/swagger/test.v1.yml").openStream(),
                 testV1SwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )

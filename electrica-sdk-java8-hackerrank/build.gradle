@@ -9,7 +9,7 @@ def hackerRankCandidatesV1SwaggerFilePath = Files.createTempFile('hackerrank-v3.
 task downloadHackerRankTestsSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.tests.yml').openStream(),
+                new URL("${artifactsUrl}/electrica-connector-hackerrank/swagger/hackerrank-v3.tests.yml").openStream(),
                 hackerRankTestsV1SwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )
@@ -19,7 +19,7 @@ task downloadHackerRankTestsSwaggerFiles {
 task downloadHackerRankCandidatesSwaggerFiles {
     doLast {
         Files.copy(
-                new URL('http://connector.artifact.dev.electrica.io/hackerrank/swagger/hackerrank-v3.candidates.yml').openStream(),
+                new URL("${artifactsUrl}/electrica-connector-hackerrank/swagger/hackerrank-v3.candidates.yml").openStream(),
                 hackerRankCandidatesV1SwaggerFilePath,
                 StandardCopyOption.REPLACE_EXISTING
         )
